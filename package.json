@@ -1,6 +1,6 @@
 {
   "name": "check-rule-mate",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "",
   "main": "./dist/main.cjs.js",
   "type": "commonjs",
