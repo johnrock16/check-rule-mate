@@ -2,7 +2,7 @@
   "name": "check-rule-mate",
   "version": "0.1.0",
   "description": "",
-  "main": "./dist/main.cjs.js",
+  "main": "./main.cjs.js",
   "type": "commonjs",
   "scripts": {
     "start": "node ./examples/vanilla/src/index.js",
