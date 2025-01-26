@@ -1,0 +1,21 @@
+{
+  "name": "validator-js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/main.js",
+  "type": "module",
+  "scripts": {
+    "start": "node ./examples/vanilla/src/index.js",
+    "build": "node build",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "example:vanilla": "node ./examples/vanilla/src/index.js",
+    "example:express": "node ./examples/express/src/main.js"
+  },
+  "author": "João Rocha",
+  "license": "",
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "express": "^4.21.2",
+    "jest": "^29.7.0"
+  }
+}

@@ -1,0 +1,11 @@
+{
+    "name": {
+        "validate": ["nameSpecialValidation"],
+        "params": {
+            "nameSpecialValidation": ["$email", "$cellphone"]
+        },
+        "error": {
+            "nameSpecialValidation": "name.nameSpecialValidation"
+        }
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "name": {
+        "rule": "name",
+        "required": true
+    },
+    "lastName": {
+        "rule": "name",
+        "required": false
+    },
+    "birthdate": {
+        "rule": "date--age",
+        "required": true
+    },
+    "email": {
+        "rule": "email",
+        "required": true
+    }
+}

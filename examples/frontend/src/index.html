@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Validator-JS</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script src='./main.js'></script>
+    <style>
+      .container {
+        display: block;
+        margin: 0 auto;
+        padding: 16px;
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 40px;
+        margin-bottom: 40px;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+      }
+
+      .field textarea {
+        min-height: 300px;
+      }
+
+      .field span {
+        display: none;
+      }
+
+      .field.error span {
+        display: block;
+        color: red;
+      }
+
+      textarea.error {
+        border-width: 2px;
+        border-color: red;
+      }
+
+      @media only screen and (max-width: 960px) {
+        .row {
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="container">
+      <h1>Validator-JS</h1>
+      <div class="row">
+        <div class="field">
+          <label>Data</label>
+          <textarea id="data"></textarea>
+          <span>invalid json</span>
+        </div>
+        <div class="field">
+          <label>DATA RULES</label>
+          <textarea id="dataRules"></textarea>
+        </div>
+        <div class="field">
+          <label>ERROR MESSAGES</label>
+          <textarea id="errorMessages"></textarea>
+        </div>
+      </div>
+      <div class="field">
+        <div class="row">
+          <div class="field">
+            <label>RULES</label>
+            <textarea id="rules"></textarea>
+          </div>
+          <div class="field">
+            <label>OUTPUT: <button id="testButton">TEST</button></label>
+            <textarea id="output"></textarea>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const dataElement = document.getElementById('data');
+        const dataRulesElement = document.getElementById('dataRules');
+        const rulesElement = document.getElementById('rules');
+        const errorMessageElement = document.getElementById('errorMessages');
+        const outputElement = document.getElementById('output');
+        const buttonElement = document.getElementById('testButton');
+
+        const fieldsInit = {
+          "name": "John",
+          "lastName": "Doe",
+          "email": "email@email.com",
+          "emailConfirm": "email@email.com",
+          "phone": "0000-0000",
+          "subject": "I need a coffe",
+          "message": "Give me coffe"
+        }
+
+        dataElement.value = JSON.stringify(fieldsInit)
+        dataRulesElement.value = JSON.stringify(window.validatorJS.CONTACT_US);
+        rulesElement.value = JSON.stringify(window.validatorJS.MY_RULES);
+        errorMessageElement.value = JSON.stringify(window.validatorJS.MY_VALIDATION_ERROR_MESSAGES);
+
+        buttonElement.addEventListener('click', () => {
+          try {
+            const fields = JSON.parse(dataElement.value);
+            const dataRules = JSON.parse(dataRulesElement.value);
+            const rules = JSON.parse(rulesElement.value);
+            const errorMessages = JSON.parse(errorMessageElement.value);
+
+            const dataValidatedCorrectly = dataValidate(fields, {validationHelpers: window.validatorJS.myValidator, rules: rules, dataRule: dataRules, dataErrorMessages: errorMessages});
+            outputElement.value = JSON.stringify(dataValidatedCorrectly);
+          } catch (error) {
+            console.log(error);
+            alert("Error to validate due some incorrect input, please fix the incorrect input before test again")
+          }
+        });
+
+        dataElement.addEventListener('change', verifyJElementSON);
+        dataRulesElement.addEventListener('change', verifyJElementSON);
+        rulesElement.addEventListener('change', verifyJElementSON);
+        errorMessageElement.addEventListener('change', verifyJElementSON);
+
+        function verifyJElementSON(e) {
+          try {
+            const json = JSON.parse(e.target.value);
+            e.target.classList.remove('error');
+            e.target.parentElement.classList.remove('error');
+          } catch (error) {
+            e.target.classList.add('error');
+            e.target.parentElement.classList.add('error');
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+{
+    "common": {
+        "hasText": "Por favor, preencha o campo"
+    },
+    "email": {
+        "regex": "Por favor, adicione um e-mail válido",
+        "equals": "O email e o email confirme não são iguais"
+    },
+    "phone": {
+        "regex": "Por favor, adicione um telefone válido"
+    },
+    "name": {
+        "nameSpecialValidation": "Por favor, preencha os seguintes campos: nome, email e telefone"
+    }
+}

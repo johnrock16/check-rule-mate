@@ -1,0 +1,66 @@
+{
+    "name": {
+        "validate": ["hasText"],
+        "error": {
+            "hasText": "common.hasText"
+        }
+    },
+    "hasText": {
+        "validate": ["hasText"],
+        "error": {
+            "hasText": "common.hasText"
+        }
+    },
+    "email":{
+        "regex": "/^[a-z0-9.]+@[a-z0-9]+\\.[a-z]+(\\.[a-z]+)?$/i",
+        "validate": ["regex"],
+        "error": {
+            "regex": "email.regex"
+        },
+        "modifier": {
+            "confirm": {
+                "validate": ["regex", "equals"],
+                "params": {
+                    "equals": ["$email"]
+                },
+                "error": {
+                    "regex": "email.regex",
+                    "equals": "email.equals"
+                }
+            }
+        }
+    },
+    "phone":{
+        "regex": "/^[0-9]{4}-[0-9]?[0-9]{4}$/",
+        "validate": ["regex"],
+        "error": {
+            "regex": "phone.regex"
+        }
+    },
+    "date": {
+        "regex": "/^\\d{4}[\/\\-](0?[1-9]|1[012])[\/\\-](0?[1-9]|[12][0-9]|3[01])$/",
+        "validate": ["regex", "validDate"],
+        "error": {
+            "regex": "common.dateFormat",
+            "validDate": "date.validDate"
+        },
+        "modifier": {
+            "age": {
+                "validate": ["regex", "validateAge"],
+                "params": {
+                    "validateAge": [18, 130]
+                },
+                "error": {
+                    "regex": "common.dateFormat",
+                    "validateAge": "date.modifier.age.validateAge"
+                }
+            }
+        }
+    },
+    "cpf":{
+        "validate": ["cpf"],
+        "error": {
+            "cpf": "cpf.cpf"
+        }
+    }
+}

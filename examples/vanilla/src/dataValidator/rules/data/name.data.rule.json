@@ -1,0 +1,14 @@
+{
+    "name": {
+        "rule": "name",
+        "required": true
+    },
+    "cellphone": {
+        "rule": "phone",
+        "required": true
+    },
+    "email": {
+        "rule": "email",
+        "required": true
+    }
+}

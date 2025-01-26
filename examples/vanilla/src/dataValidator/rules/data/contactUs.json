@@ -1,0 +1,30 @@
+{
+    "name": {
+        "rule": "name",
+        "required": true
+    },
+    "lastName": {
+        "rule": "name",
+        "required": true
+    },
+    "email": {
+        "rule": "email",
+        "required": true
+    },
+    "emailConfirm": {
+        "rule": "email--confirm",
+        "required": true
+    },
+    "phone": {
+        "rule": "phone",
+        "required": false
+    },
+    "subject": {
+        "rule": "hasText",
+        "required": true
+    },
+    "message": {
+        "rule": "hasText",
+        "required": true
+    }
+}

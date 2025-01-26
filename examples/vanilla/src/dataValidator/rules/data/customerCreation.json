@@ -1,0 +1,26 @@
+{
+    "name": {
+        "rule": "name",
+        "required": true
+    },
+    "lastName": {
+        "rule": "name",
+        "required": false
+    },
+    "birthdate": {
+        "rule": "date--age",
+        "required": true
+    },
+    "cpf": {
+        "rule": "cpf",
+        "required": true
+    },
+    "email": {
+        "rule": "email",
+        "required": true
+    },
+    "phone": {
+        "rule": "phone",
+        "required": true
+    }
+}
