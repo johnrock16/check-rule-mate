@@ -1,4 +1,4 @@
-# validator-js
+# check-rule-mate
 
 ## Overview
 
@@ -6,7 +6,7 @@ A lightweight and reusable JavaScript "library" for data validation. This librar
 
 The core goal is to provide a **reusable and easy-to-extend** for handling various form inputs, including fields like name, email, birthdate, phone number, and more.
 
-Test the core functionalities here: Validator.js Demo
+Test the core functionalities here: [check-rule-mate Demo](https://johnrock16.github.io/check-rule-mate/)
 (Note: Creating or modifying custom validators is not supported in the demo, as it requires JavaScript implementation.)
 
 
@@ -205,6 +205,6 @@ Explore examples in the examples folder folder.
 #### Vanilla
 Here you are free to test anything you want about form validation, also We have a lot of tests scenarios in __tests__ which could be a great start.
 #### Express:
-See how the validator-js works in back-end using a middleware.
+See how the check-rule-mate works in back-end using a middleware.
 #### Frontend:
 Here you can found the DEMO page and it's a type of "playground" to test how RULES works and validations works. (Here you can't create customized javascript so custom validatorHelpers are disabled by default)
