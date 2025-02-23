@@ -1,5 +1,5 @@
 import { myValidator, nameValidator } from '../dataValidator/validators.js';
-import validatorJS  from '../../../../dist/main.js';
+import { dataValidate }  from '../../../../src/main.js';
 import MY_RULES from '../dataValidator/rules/validators/myValidatorRules.json' with { type: 'json' };
 import CONTACT_US from '../dataValidator/rules/data/contactUs.json' with { type: 'json' };
 import CUSTOMER_CREATION from '../dataValidator/rules/data/customerCreation.json' with { type: 'json' };
@@ -11,55 +11,58 @@ import MY_VALIDATOR_ERROR_MESSAGES from '../i18n/en_US/errors/myValidatorRules.j
 describe('dataValidator', () => {
     describe('contact us', () => {
         describe('happy ending', () => {
-            test('filled all fields correctly', () => {
+            test('filled all fields correctly', async () => {
                 const fieldsFilledCorrectly = {
                     "name": "John",
                     "lastName": "Doe",
                     "email": "email@email.com",
+                    "emailConfirm": "email@email.com",
                     "phone": "0000-0000",
                     "subject": "I need a coffe",
                     "message": "Give me coffe"
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US, dataErrorMessages: MY_VALIDATOR_ERROR_MESSAGES});
+                const dataValidated = await dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US, dataErrorMessages: MY_VALIDATOR_ERROR_MESSAGES});
                 expect(dataValidated.ok).toBeTruthy();
             });
 
 
-            test('filled all fields correctly without error messages translated in parameters', () => {
+            test('filled all fields correctly without error messages translated in parameters', async () => {
                 const fieldsFilledCorrectly = {
                     "name": "John",
                     "lastName": "Doe",
                     "email": "email@email.com",
+                    "emailConfirm": "email@email.com",
                     "phone": "0000-0000",
                     "subject": "I need a coffe",
                     "message": "Give me coffe"
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
+                const dataValidated = await dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
                 expect(dataValidated.ok).toBeTruthy();
             });
 
-            test('filled with required only', () => {
+            test('filled with required only', async () => {
                 const fieldsFilledCorrectly = {
                     "name": "John",
                     "lastName": "Doe",
                     "email": "email@email.com",
+                    "emailConfirm": "email@email.com",
                     "phone": "",
                     "subject": "I need a coffe",
                     "message": "Give me coffe"
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
+                const dataValidated = await dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
                 expect(dataValidated.ok).toBeTruthy();
             });
         });
 
         describe('bad ending', () => {
-            test('missing all properties', () => {
+            test('missing all properties', async () => {
                 const fieldsMissing = {}
-                const dataValidated = validatorJS.dataValidate(fieldsMissing, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
+                const dataValidated = await dataValidate(fieldsMissing, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
                 expect(dataValidated.errorMessage).toBe("Missing fields for dataRules");
             });
 
-            test('missing one properties', () => {
+            test('missing one properties', async () => {
                 const fieldsFilledWrong = {
                     "lastName": "",
                     "email": "emailcom",
@@ -67,133 +70,142 @@ describe('dataValidator', () => {
                     "subject": "",
                     "message": ""
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledWrong, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
+                const dataValidated = await dataValidate(fieldsFilledWrong, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
                 expect(dataValidated.errorMessage).toBe("Missing properties");
             });
 
-            test('missing some properties', () => {
+            test('missing some properties', async () => {
                 const fieldsFilledWrong = {
                     "lastName": "",
                     "email": "emailcom",
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledWrong, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
+                const dataValidated = await dataValidate(fieldsFilledWrong, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
                 expect(dataValidated.errorMessage).toBe("Missing properties");
             });
 
-            test('filled wrong with error messages', () => {
+            test('filled wrong with error messages', async () => {
                 const fieldsFilledWrong = {
                     "name": "",
                     "lastName": "Doe",
                     "email": "email@email.com",
+                    "emailConfirm": "email@email.com",
                     "phone": "0000-0000",
                     "subject": "I need a coffe",
                     "message": "Give me coffe"
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledWrong, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US, dataErrorMessages: MY_VALIDATOR_ERROR_MESSAGES});
+                const dataValidated = await dataValidate(fieldsFilledWrong, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US, dataErrorMessages: MY_VALIDATOR_ERROR_MESSAGES});
                 expect(dataValidated.dataErrors.name.errorMessage).toBe("Please, fill the field");
             });
 
-            test('filled wrong without error messages', () => {
+            test('filled wrong without error messages', async () => {
                 const fieldsFilledWrong = {
                     "name": "",
                     "lastName": "Doe",
                     "email": "email@email.com",
+                    "emailConfirm": "email@email.com",
                     "phone": "0000-0000",
                     "subject": "I need a coffe",
                     "message": "Give me coffe"
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledWrong, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
+                const dataValidated = await dataValidate(fieldsFilledWrong, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
                 expect(dataValidated.dataErrors.name.errorMessage).toBe("common.hasText");
             });
 
-            test('filled all fields wrong', () => {
+            test('filled all fields wrong', async () => {
                 const fieldsFilledWrong = {
                     "name": "",
                     "lastName": "",
                     "email": "emailcom",
+                    "emailConfirm": "email",
                     "phone": "0-0000",
                     "subject": "",
                     "message": ""
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledWrong, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
-                expect(Object.keys(dataValidated.dataErrors).length).toBe(6);
+                const dataValidated = await dataValidate(fieldsFilledWrong, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
+                expect(Object.keys(dataValidated.dataErrors).length).toBe(7);
             });
 
-            test('filled name wrong', () => {
+            test('filled name wrong', async () => {
                 const fieldsFilledNameWrong = {
                     "name": "",
                     "lastName": "Doe",
                     "email": "email@email.com",
+                    "emailConfirm": "email@email.com",
                     "phone": "",
                     "subject": "I need a coffe",
                     "message": "Give me coffe"
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledNameWrong, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
+                const dataValidated = await dataValidate(fieldsFilledNameWrong, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
                 expect(dataValidated.dataErrors.name.name).toBe('name');
             });
 
-            test('filled last name wrong', () => {
+            test('filled last name wrong', async () => {
                 const fieldsFilledNameWrong = {
                     "name": "John",
                     "lastName": "",
                     "email": "email@email.com",
+                    "emailConfirm": "email@email.com",
                     "phone": "",
                     "subject": "I need a coffe",
                     "message": "Give me coffe"
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledNameWrong, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
+                const dataValidated = await dataValidate(fieldsFilledNameWrong, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
                 expect(dataValidated.dataErrors.lastName.name).toBe('lastName');
             });
 
-            test('filled email wrong', () => {
+            test('filled email wrong', async () => {
                 const fieldsFilledNameWrong = {
                     "name": "John",
                     "lastName": "Doe",
                     "email": "emailcom",
+                    "emailConfirm": "email@email.com",
                     "phone": "",
                     "subject": "I need a coffe",
                     "message": "Give me coffe"
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledNameWrong, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
+                const dataValidated = await dataValidate(fieldsFilledNameWrong, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
                 expect(dataValidated.dataErrors.email.name).toBe('email');
             });
 
-            test('filled phone wrong', () => {
+            test('filled phone wrong', async () => {
                 const fieldsFilledCorrectly = {
                     "name": "John",
                     "lastName": "Doe",
                     "email": "email@email.com",
+                    "emailConfirm": "email@email.com",
                     "phone": "000",
                     "subject": "I need a coffe",
                     "message": "Give me coffe"
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
+                const dataValidated = await dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
                 expect(dataValidated.dataErrors.phone.name).toBe('phone');
             });
 
-            test('filled subject wrong', () => {
+            test('filled subject wrong', async () => {
                 const fieldsFilledCorrectly = {
                     "name": "John",
                     "lastName": "Doe",
                     "email": "email@email.com",
+                    "emailConfirm": "email@email.com",
                     "phone": "0000-0000",
                     "subject": "",
                     "message": "Give me coffe"
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
+                const dataValidated = await dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
                 expect(dataValidated.dataErrors.subject.name).toBe('subject');
             });
 
-            test('filled message wrong', () => {
+            test('filled message wrong', async () => {
                 const fieldsFilledCorrectly = {
                     "name": "John",
                     "lastName": "Doe",
                     "email": "email@email.com",
+                    "emailConfirm": "email@email.com",
                     "phone": "0000-0000",
                     "subject": "I need a coffe",
                     "message": ""
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
+                const dataValidated = await dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
                 expect(dataValidated.dataErrors.message.name).toBe('message');
             });
         });
@@ -206,7 +218,7 @@ describe('dataValidator', () => {
         });
 
         describe('happy ending', () => {
-            test('filled all fields correctly', () => {
+            test('filled all fields correctly', async () => {
                 const fieldsFilledCorrectly = {
                     "name": "John",
                     "lastName": "Doe",
@@ -215,11 +227,11 @@ describe('dataValidator', () => {
                     "email": "email@email.com",
                     "phone": "0000-0000",
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, dataRule: CUSTOMER_CREATION, dataErrorMessages: MY_VALIDATOR_ERROR_MESSAGES});
+                const dataValidated = await dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, dataRule: CUSTOMER_CREATION, dataErrorMessages: MY_VALIDATOR_ERROR_MESSAGES});
                 expect(dataValidated.ok).toBeTruthy();
             });
 
-            test('filled all fields correctly without error messages translated in parameters', () => {
+            test('filled all fields correctly without error messages translated in parameters', async () => {
                 const fieldsFilledCorrectly = {
                     "name": "John",
                     "lastName": "Doe",
@@ -228,11 +240,11 @@ describe('dataValidator', () => {
                     "email": "email@email.com",
                     "phone": "0000-0000",
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, dataRule: CUSTOMER_CREATION});
+                const dataValidated = await dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, dataRule: CUSTOMER_CREATION});
                 expect(dataValidated.ok).toBeTruthy();
             });
 
-            test('filled all fields expect optionals', () => {
+            test('filled all fields expect optionals', async () => {
                 const fieldsFilledCorrectly = {
                     "name": "John",
                     "lastName": "",
@@ -241,11 +253,11 @@ describe('dataValidator', () => {
                     "email": "email@email.com",
                     "phone": "0000-0000",
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, dataRule: CUSTOMER_CREATION, dataErrorMessages: MY_VALIDATOR_ERROR_MESSAGES});
+                const dataValidated = await dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, dataRule: CUSTOMER_CREATION, dataErrorMessages: MY_VALIDATOR_ERROR_MESSAGES});
                 expect(dataValidated.ok).toBeTruthy();
             });
 
-            test('filled all fields and using inheritance and variables', () => {
+            test('filled all fields and using inheritance and variables', async () => {
                 const fieldsFilledCorrectly = {
                     "name": "John",
                     "lastName": "Doe",
@@ -261,13 +273,13 @@ describe('dataValidator', () => {
                     ...myValidatorMocked(value, rule, modifier, data),
                     ...nameValidator(value, rule, modifier, data)
                 });
-                const dataValidated = validatorJS.dataValidate(fieldsFilledCorrectly, {validationHelpers: validatorHelpers, rules: RULES, dataRule: DATA_RULES, dataErrorMessages: MY_VALIDATOR_ERROR_MESSAGES});
+                const dataValidated = await dataValidate(fieldsFilledCorrectly, {validationHelpers: validatorHelpers, rules: RULES, dataRule: DATA_RULES, dataErrorMessages: MY_VALIDATOR_ERROR_MESSAGES});
                 expect(dataValidated.ok).toBeTruthy();
             })
         });
 
         describe('bad ending', () => {
-            test('filled cpf wrong', () => {
+            test('filled cpf wrong', async () => {
                 const fieldsFilledCorrectly = {
                     "name": "John",
                     "lastName": "Doe",
@@ -276,11 +288,11 @@ describe('dataValidator', () => {
                     "email": "email@email.com",
                     "phone": "0000-0000",
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, dataRule: CUSTOMER_CREATION});
+                const dataValidated = await dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, dataRule: CUSTOMER_CREATION});
                 expect(dataValidated.dataErrors.cpf.name).toBe('cpf');
             });
 
-            test('filled birthdate invalid regex', () => {
+            test('filled birthdate invalid regex', async () => {
                 const fieldsFilledCorrectly = {
                     "name": "John",
                     "lastName": "Doe",
@@ -289,11 +301,11 @@ describe('dataValidator', () => {
                     "email": "email@email.com",
                     "phone": "0000-0000",
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, dataRule: CUSTOMER_CREATION});
+                const dataValidated = await dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, dataRule: CUSTOMER_CREATION});
                 expect(dataValidated.dataErrors.birthdate.errorType).toBe('regex');
             });
 
-            test('filled birthdate invalid age (under 18)', () => {
+            test('filled birthdate invalid age (under 18)', async () => {
                 const fieldsFilledCorrectly = {
                     "name": "John",
                     "lastName": "Doe",
@@ -302,7 +314,7 @@ describe('dataValidator', () => {
                     "email": "email@email.com",
                     "phone": "0000-0000",
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, dataRule: CUSTOMER_CREATION});
+                const dataValidated = await dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, dataRule: CUSTOMER_CREATION});
                 expect(dataValidated.dataErrors.birthdate.errorType).toBe('validateAge');
             });
         });
@@ -315,7 +327,7 @@ describe('dataValidator', () => {
         });
 
         describe('happy ending', () => {
-            test('filled all fields correctly', () => {
+            test('filled all fields correctly', async () => {
                 const fieldsFilledCorrectly = {
                     "name": "John",
                     "lastName": "Doe",
@@ -325,13 +337,13 @@ describe('dataValidator', () => {
                     "emailConfirm": "email@email.com",
                     "phone": "0000-0000",
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, dataRule: MY_ACCOUNT, dataErrorMessages: MY_VALIDATOR_ERROR_MESSAGES});
+                const dataValidated = await dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, dataRule: MY_ACCOUNT, dataErrorMessages: MY_VALIDATOR_ERROR_MESSAGES});
                 expect(dataValidated.ok).toBeTruthy();
             });
         });
 
         describe('bad ending', () => {
-            test('filled email confirm are not equal', () => {
+            test('filled email confirm are not equal', async () => {
                 const fieldsFilledCorrectly = {
                     "name": "John",
                     "lastName": "Doe",
@@ -341,11 +353,11 @@ describe('dataValidator', () => {
                     "emailConfirm": "email@email.co",
                     "phone": "0000-0000",
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, dataRule: MY_ACCOUNT, dataErrorMessages: MY_VALIDATOR_ERROR_MESSAGES});
+                const dataValidated = await dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, dataRule: MY_ACCOUNT, dataErrorMessages: MY_VALIDATOR_ERROR_MESSAGES});
                 expect(dataValidated.dataErrors.emailConfirm.errorType).toBe('equals');
             });
 
-            test('filled email confirm are not correct email format', () => {
+            test('filled email confirm are not correct email format', async () => {
                 const fieldsFilledCorrectly = {
                     "name": "John",
                     "lastName": "Doe",
@@ -355,7 +367,7 @@ describe('dataValidator', () => {
                     "emailConfirm": "email",
                     "phone": "0000-0000",
                 }
-                const dataValidated = validatorJS.dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, dataRule: MY_ACCOUNT, dataErrorMessages: MY_VALIDATOR_ERROR_MESSAGES});
+                const dataValidated = await dataValidate(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, dataRule: MY_ACCOUNT, dataErrorMessages: MY_VALIDATOR_ERROR_MESSAGES});
                 expect(dataValidated.dataErrors.emailConfirm.errorType).toBe('regex');
             });
         });

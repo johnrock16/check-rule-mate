@@ -32,12 +32,31 @@ export const myValidator = function (value, rule, modifier = null, data = null) 
         return value === data[key];
     }
 
+    async function isDataFetched() {
+        try {
+            let result = await new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    const success = true;
+                    if (success) {
+                        resolve('Data fetched successfully!');
+                    } else {
+                        reject('Error fetching data');
+                    }
+                }, 2000);
+            });
+            return !!result;
+        } catch (error) {
+            return false;
+        }
+    }
+
     return({
         regex,
         hasText,
         maxLength,
         validDate,
         validateAge,
+        isDataFetched,
         cpf,
         equals
     })

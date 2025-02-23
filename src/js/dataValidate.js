@@ -21,7 +21,7 @@ export function dataValidate(data, {validationHelpers = {}, rules, dataRule, dat
         return current;
     }
 
-    function inputValidation(dataAttribute, data = null) {
+    async function inputValidation(dataAttribute, data = null) {
         const { rule, required } = dataRule[dataAttribute.key];
 
         if ((rule && required) || (!required && dataAttribute.value != '')) {
@@ -29,7 +29,7 @@ export function dataValidate(data, {validationHelpers = {}, rules, dataRule, dat
                 const INPUT_RULE = rule.split('--')[0];
                 const RULE_MODIFIER = rule.split('--').length > 1 ? rule.split('--')[1] : '';
                 const dataAttributeValidation = dataAttributeValidator(dataAttribute.value, rules[INPUT_RULE], RULE_MODIFIER, validationHelpers, data);
-                const { isValid, errorMessage, errorType } = dataAttributeValidation.validate();
+                const { isValid, errorMessage, errorType } = await dataAttributeValidation.validate();
                 if (!isValid) {
                     dataErrors[dataAttribute.key] = {
                         name: dataAttribute.key,
@@ -44,13 +44,13 @@ export function dataValidate(data, {validationHelpers = {}, rules, dataRule, dat
         return true;
     }
 
-    function validate() {
+    async function validate() {
         let dataArr = Object.keys(data).map((key) => ({ key, value: data[key] }));
         if (dataArr && dataArr.length > 0) {
             if(!Object.keys(dataRule).every((key) => data.hasOwnProperty(key))) {
                 return { error: true, errorMessage: "Missing properties"}
             }
-            const dataValidators = [...dataArr].map((input) => inputValidation(input, data));
+            const dataValidators = await Promise.all([...dataArr].map(async (input) => await inputValidation(input, data)));
 
             if (dataValidators.some((element) => !element)) {
                 return { error: true, dataErrors: dataErrors };
@@ -82,35 +82,38 @@ export function dataValidate(data, {validationHelpers = {}, rules, dataRule, dat
  * @returns {{validate: Function}} the built function to validate all this parameters
  */
 function dataAttributeValidator (value, rule, modifier = null, customValidation = null, data = null) {
-    function validateRules(rule) {
+    async function validateRules(rule) {
         let errorMessage;
         let errorType;
-        const isValid = !rule.validate.some((validation) => {
-            let isInvalid = true;
+        const validations = await Promise.all(rule.validate.map(async (validation) => {
+            let isValid = true;
             if ((rule.params && rule.params[validation] && rule.params[validation].length > 0)) {
                 const params = rule.params[validation].map((param) => (typeof param === 'string' && param[0] === '$') ? param.substring(1, param.length) : param);
-                isInvalid = !this[validation](...params)
+                const validateResponse = await this[validation](...params);
+                isValid = validateResponse;
             } else {
-                isInvalid = !this[validation]()
+                const validateResponse = await this[validation]();
+                isValid = validateResponse;
             }
-            if (isInvalid && !errorMessage && rule?.error[validation]) {
+            if (!isValid && !errorMessage && rule?.error[validation]) {
                 errorMessage = rule.error[validation];
                 errorType = validation;
             }
-            return isInvalid;
-        });
+            return isValid;
+        }));
+        const isValid = !validations.some((validation) => !validation);
         return {isValid, errorMessage, errorType}
     }
 
-    function validate() {
+    async function validate() {
         if (customValidation && typeof customValidation === 'function') {
             const validation = customValidation(value, rule, modifier, data);
             Object.keys(validation).forEach((key) => {
                 this[key] = validation[key];
             })
         }
-
-        return modifier ? validateRules.call(this, rule.modifier[modifier]) : validateRules.call(this, rule);
+        const response = modifier ? await validateRules.call(this, rule.modifier[modifier]) : await validateRules.call(this, rule);
+        return response;
     }
 
     return({
