@@ -1,4 +1,4 @@
-import validatorJS from "../../../dist/main.js";
+import { dataValidate } from "../../../dist/main.js";
 import { myValidator, nameValidator } from './dataValidator/validators.js';
 import MY_RULES from './dataValidator/rules/validators/myValidatorRules.json' with { type: 'json' };
 import NAME_RULE from './dataValidator/rules/validators/name.rule.json' with { type: 'json' };
@@ -26,36 +26,38 @@ const fieldsNotWorking = {
     "message": ""
 }
 
+async function test() {
+    const dataValidatedWrong = await dataValidate(fieldsNotWorking, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US, dataErrorMessages: MY_VALIDATION_ERROR_MESSAGES});
+    const dataValidatedWrongWIthoutErrorMessage = await dataValidate(fieldsNotWorking, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
+    const dataValidatedCorrectly = await dataValidate(fieldsWorking, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US, dataErrorMessages: MY_VALIDATION_ERROR_MESSAGES});
 
-const dataValidatedWrong = validatorJS.dataValidate(fieldsNotWorking, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US, dataErrorMessages: MY_VALIDATION_ERROR_MESSAGES});
-const dataValidatedWrongWIthoutErrorMessage = validatorJS.dataValidate(fieldsNotWorking, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US});
-const dataValidatedCorrectly = validatorJS.dataValidate(fieldsWorking, {validationHelpers: myValidator, rules: MY_RULES, dataRule: CONTACT_US, dataErrorMessages: MY_VALIDATION_ERROR_MESSAGES});
+    console.log({dataValidatedWrong});
+    console.log({dataValidatedWrongWIthoutErrorMessage});
+    console.log({dataValidatedCorrectly});
 
-console.log(dataValidatedWrong);
-console.log(dataValidatedWrongWIthoutErrorMessage);
-console.log(dataValidatedCorrectly);
+    // // example using different validators, rules and data rules and also using variables in this validation (see variable usages in data-rules, rules and validators)
+    const RULES = {...MY_RULES, ...NAME_RULE};
+    const DATA_RULES = {...CONTACT_US, ...NAME_DATA_RULE}
+    const validatorHelpers = (value, rule, modifier = null, data = null) => ({
+        ...myValidator(value, rule, modifier, data),
+        ...nameValidator(value, rule, modifier, data)
+    });
 
+    const fieldsWorking2 = {
+        "name": "John",
+        "lastName": "Doe",
+        "email": "email@email.com",
+        "emailConfirm": "email@email.com",
+        "phone": "",
+        "subject": "I need a coffe",
+        "message": "Give me coffe",
+        "cellphone": "0000-0000"
+    }
 
-// // example using different validators, rules and data rules and also using variables in this validation (see variable usages in data-rules, rules and validators)
+    const dataValidatedCorrectlyWithInheritanceAndVariables = await dataValidate(fieldsWorking2, {validationHelpers: validatorHelpers, rules: RULES, dataRule: DATA_RULES, dataErrorMessages: MY_VALIDATION_ERROR_MESSAGES});
 
-const RULES = {...MY_RULES, ...NAME_RULE};
-const DATA_RULES = {...CONTACT_US, ...NAME_DATA_RULE}
-const validatorHelpers = (value, rule, modifier = null, data = null) => ({
-    ...myValidator(value, rule, modifier, data),
-    ...nameValidator(value, rule, modifier, data)
-});
-
-const fieldsWorking2 = {
-    "name": "John",
-    "lastName": "Doe",
-    "email": "email@email.com",
-    "emailConfirm": "email@email.com",
-    "phone": "",
-    "subject": "I need a coffe",
-    "message": "Give me coffe",
-    "cellphone": "0000-0000"
+    console.log({dataValidatedCorrectlyWithInheritanceAndVariables})
 }
 
-const dataValidatedCorrectlyWithInheritanceAndVariables = validatorJS.dataValidate(fieldsWorking2, {validationHelpers: validatorHelpers, rules: RULES, dataRule: DATA_RULES, dataErrorMessages: MY_VALIDATION_ERROR_MESSAGES});
+test();
 
-console.log(dataValidatedCorrectlyWithInheritanceAndVariables)

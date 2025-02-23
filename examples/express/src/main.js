@@ -1,5 +1,5 @@
 import express from 'express';
-import validatorJS from '../../../dist/main.js';
+import { dataValidate } from '../../../dist/main.js';
 import { expressValidator } from './dataValidator/validators.js';
 import MY_RULES from './dataValidator/rules/validators/myValidatorRules.json' with { type: 'json' };
 import MY_VALIDATION_ERROR_MESSAGES from './i18n/en_US/errors/myValidatorRules.json' with { type: 'json' };
@@ -28,9 +28,9 @@ async function formValidatorMiddleware(req, res, next) {
         res.status(400).json('invalid type');
         return;
     }
-    const dataValidate = validatorJS.dataValidate(req.body.form, {validationHelpers: expressValidator, rules: MY_RULES, dataRule: RULES, dataErrorMessages: MY_VALIDATION_ERROR_MESSAGES});
-    if (dataValidate.error) {
-        res.status(400).json(dataValidate);
+    const dataValidated = await dataValidate(req.body.form, {validationHelpers: expressValidator, rules: MY_RULES, dataRule: RULES, dataErrorMessages: MY_VALIDATION_ERROR_MESSAGES});
+    if (dataValidated.error) {
+        res.status(400).json(dataValidated);
         return;
     }
     next();
