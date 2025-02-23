@@ -2,11 +2,16 @@
 
 ## Overview
 
-A lightweight and reusable JavaScript "library" for data validation. This library was  esigned to simplify the process of validating form inputs using flexible rules and error handling. Validating your data by allowing you to define flexible rules, custom error messages, and reusable helper functions—all in a structured format.
+A lightweight and reusable JavaScript "library" for data validation. This library was designed to simplify the process of validating form inputs using flexible rules and error handling. Validating your data by allowing you to define flexible rules, custom error messages, and reusable helper functions—all in a structured format.
 
 The core goal is to provide a **reusable and easy-to-extend** for handling various form inputs, including fields like name, email, birthdate, phone number, and more.
 
-Test the core functionalities here: [check-rule-mate Demo](https://johnrock16.github.io/check-rule-mate/)
+
+**Github repository:** [check-rule-mate repository](https://github.com/johnrock16/check-rule-mate)
+
+**Examples of how implement check-rule-mate:** [check-rule-mate examples](#Example-Usage)
+
+Test the core functionalities here: [check-rule-mate demo](https://johnrock16.github.io/check-rule-mate/)
 (Note: Creating or modifying custom validators is not supported in the demo, as it requires JavaScript implementation.)
 
 
@@ -23,6 +28,7 @@ Test the core functionalities here: [check-rule-mate Demo](https://johnrock16.gi
 - **Modifiers:** Extend rules for specific use cases (e.g., age validation in a date rule).
 - **Dynamic Parameters:** Use $variable to access field data within rules.
 - **Modular Rules and Validators:** Create multiple files for rules and helpers, organizing them by context or form.
+- **Async Validations:** You could create async functions to validate some data. Do You need to use a fetch or wait a promise to be resolved? No problems.
 
 ## Table of Contents
 
@@ -68,23 +74,29 @@ Here’s an example of validating a set of fields:
   const CONTACT_US = require('./dataValidator/rules/data/contactUs.json');
   const MY_VALIDATION_ERROR_MESSAGES = require('./i18n/en_US/errors/myValidatorRules.json');
 
-  const fields = {
-    name: "John",
-    lastName: "Doe",
-    email: "email@email.com",
-    emailConfirm: "email@email.com",
-    phone: "",
-    subject: "I need a coffee",
-    message: "Give me coffee"
-  };
+  async function runDataValidate() {
+    const fields = {
+      name: "John",
+      lastName: "Doe",
+      email: "email@email.com",
+      emailConfirm: "email@email.com",
+      phone: "",
+      subject: "I need a coffee",
+      message: "Give me coffee"
+    };
 
-  // This should return { ok: true }
-  const result = dataValidate(fields, {
-    validationHelpers: myValidator,
-    rules: MY_RULES,
-    dataRule: CONTACT_US,
-    dataErrorMessages: MY_VALIDATION_ERROR_MESSAGES,
-  });
+    // This should return { ok: true }
+    const result = await dataValidate(fields, {
+      validationHelpers: myValidator,
+      rules: MY_RULES,
+      dataRule: CONTACT_US,
+      dataErrorMessages: MY_VALIDATION_ERROR_MESSAGES,
+    });
+
+    console.log(result);
+  }
+
+  runDataValidate();
 ```
 
 #### Parameters for dataValidate:
@@ -184,7 +196,25 @@ const myValidator = function (value, rule, modifier = null, data = null) {
     return value === data[key];
   }
 
-  return { regex, hasText, equals };
+  async function isDataFetched() {
+    try {
+      let result = await new Promise((resolve, reject) => {
+        setTimeout(() => {
+          const success = !!value;
+          if (success) {
+            resolve('Data fetched successfully!');
+          } else {
+            reject('Error fetching data');
+          }
+        }, 2000);
+      });
+      return !!result;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  return { regex, hasText, equals, isDataFetched };
 };
 ```
 
@@ -198,13 +228,44 @@ Define custom error messages in a structured format:
 }
 ```
 
-### Example Usage
+## Example Usage
 
-Explore examples in the examples folder folder.
+Explore examples in the examples folder folder. **Before execute any test change the type in package.json for module instead commonjs**
 
-#### Vanilla
+**Examples folder**: [Github repo examples folder.](https://github.com/johnrock16/check-rule-mate/tree/main/examples)
+
+### Vanilla
 Here you are free to test anything you want about form validation, also We have a lot of tests scenarios in __tests__ which could be a great start.
-#### Express:
+
+Command to run Vanilla example:
+```bash
+npm run example:vanilla
+```
+
+**Vanilla example**: [Github repo vanilla file.](https://github.com/johnrock16/check-rule-mate/blob/main/examples/vanilla/src/index.js)
+
+
+#### __tests__
+
+Command to run tests:
+```bash
+npm run test
+```
+
+**Unit tests examples:** [Github repo unit tests file.](https://github.com/johnrock16/check-rule-mate/blob/main/examples/vanilla/src/__tests__/dataValidator.test.js)
+
+### Express:
 See how the check-rule-mate works in back-end using a middleware.
-#### Frontend:
+
+Command to run Express example:
+```bash
+npm run example:express
+```
+
+**Express example:** [Github repo express file.](https://github.com/johnrock16/check-rule-mate/blob/main/examples/express/src/main.js)
+
+
+### Frontend:
 Here you can found the DEMO page and it's a type of "playground" to test how RULES works and validations works. (Here you can't create customized javascript so custom validatorHelpers are disabled by default)
+
+**Frontend example:** [check-rule-mate demo.](https://johnrock16.github.io/check-rule-mate/)
