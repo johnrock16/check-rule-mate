@@ -1,4 +1,5 @@
 # check-rule-mate
+Validate any type of data in JS using your own rules and validations.
 
 ## Overview
 

@@ -1,9 +1,10 @@
 {
   "name": "check-rule-mate",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "",
   "main": "./dist/main.cjs.js",
   "type": "commonjs",
+  "keywords": ["data validation", "data validation js", "validator", "validate", "form validator", "form validator js", "form validate", "check-rule-mate", "check rule", "check rule mate"],
   "scripts": {
     "start": "node ./examples/vanilla/src/index.js",
     "build": "node build",
