@@ -11,7 +11,7 @@ The core goal is to provide a **reusable and easy-to-extend** for handling vario
 
 **Examples of how implement check-rule-mate:** [check-rule-mate examples](#Example-Usage)
 
-Test the core functionalities here: [check-rule-mate demo](https://johnrock16.github.io/check-rule-mate/)
+**Test the core functionalities here:** [check-rule-mate demo](https://johnrock16.github.io/check-rule-mate/)
 (Note: Creating or modifying custom validators is not supported in the demo, as it requires JavaScript implementation.)
 
 
