@@ -1,0 +1,12 @@
+examples/
+dist/frontend
+dist/main.js
+index.html
+jest.config.js
+build.js
+*.md
+*.git/
+*.tgz
+node_modules/
+.gitignore
+package-lock.json

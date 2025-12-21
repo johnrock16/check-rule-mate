@@ -1,11 +1,26 @@
 /**
  * Validate your data fields using your rules, data rules and validators.
- * @param {[DataField]} data - All the data fields to be validate
+ * @param {[DataField]} dataParameter - All the data fields to be validate
  * @param {DataValidatorConfigs} config - The configs which will be followed during validation
- * @returns {DataValidatorSuccessResponse | DataValidatorErrorResponse} - The response of your validation
  */
-export function dataValidate(data, {validationHelpers = {}, rules, dataRule, dataErrorMessages = {}}) {
-    const dataErrors = {};
+export function createValidator(dataParameter, {validationHelpers = {}, rules, schema, errorMessages = {}, options = { propertiesMustMatch: true, abortEarly: false}}) {
+    let errors = {};
+    let data = dataParameter;
+
+    const validateByStrategies = {
+        all: async (dataArr) => Promise.all([...dataArr].map(async (input) => await inputValidation(input, data))),
+        first: async (dataArr) => {
+            const results = []
+            for (const input of dataArr) {
+                const result = await inputValidation(input, data);
+                results.push(result);
+                if (!result) {
+                    return results
+                }
+            }
+            return results;
+        }
+    };
 
     function getObjectValueByPath(obj, path) {
         if (!obj || typeof path !== 'string') return undefined;
@@ -22,41 +37,67 @@ export function dataValidate(data, {validationHelpers = {}, rules, dataRule, dat
     }
 
     async function inputValidation(dataAttribute, data = null) {
-        const { rule, required } = dataRule[dataAttribute.key];
-
-        if ((rule && required) || (!required && dataAttribute.value != '')) {
-            if (rule) {
-                const INPUT_RULE = rule.split('--')[0];
-                const RULE_MODIFIER = rule.split('--').length > 1 ? rule.split('--')[1] : '';
-                const dataAttributeValidation = dataAttributeValidator(dataAttribute.value, rules[INPUT_RULE], RULE_MODIFIER, validationHelpers, data);
-                const { isValid, errorMessage, errorType } = await dataAttributeValidation.validate();
-                if (!isValid) {
-                    dataErrors[dataAttribute.key] = {
-                        name: dataAttribute.key,
-                        error: true,
-                        errorMessage: getObjectValueByPath(dataErrorMessages, errorMessage) || errorMessage,
-                        errorType: errorType
+        if (schema[dataAttribute.key]) {
+            const { rule, required } = schema[dataAttribute.key];
+            if ((rule && required) || (!required && dataAttribute.value != '')) {
+                if (rule) {
+                    const INPUT_RULE = rule.split('--')[0];
+                    const RULE_MODIFIER = rule.split('--').length > 1 ? rule.split('--')[1] : '';
+                    const dataAttributeValidation = dataAttributeValidator(dataAttribute.value, rules[INPUT_RULE], RULE_MODIFIER, validationHelpers, data);
+                    const { isValid, errorMessage, errorType } = await dataAttributeValidation.validate();
+                    if (!isValid) {
+                        errors[dataAttribute.key] = {
+                            name: dataAttribute.key,
+                            error: true,
+                            errorMessage: getObjectValueByPath(errorMessages, errorMessage) || errorMessage,
+                            errorType: errorType
+                        }
                     }
+                    return isValid;
                 }
-                return isValid;
             }
+        } else if (options.propertiesMustMatch) {
+            errors[dataAttribute.key] = {
+                name: dataAttribute.key,
+                error: true,
+                errorMessage: "Invalid property"
+            }
+            return false;
         }
         return true;
     }
 
+    /**
+     * Validate only a field using the attribute key
+     * @param {string} key - The field key name you want to validate
+     * @returns {DataValidatorSuccessResponse | DataValidatorErrorResponse} - The response of your validation
+     */
+    async function validateField(key) {
+        const result = await inputValidation({key: key, value: data[key]}, data);
+        if (!result) {
+            return { error: true, errors: errors[key]}
+        }
+        return { ok: true}
+    }
+
+    /**
+     * Validate the entire fields using the schema
+     * @returns {DataValidatorSuccessResponse | DataValidatorErrorResponse} - The response of your validation
+     */
     async function validate() {
+        errors = {};
         let dataArr = Object.keys(data).map((key) => ({ key, value: data[key] }));
         if (dataArr && dataArr.length > 0) {
-            if(!Object.keys(dataRule).every((key) => data.hasOwnProperty(key))) {
+            if(!Object.keys(schema).every((key) => data.hasOwnProperty(key))) {
                 return { error: true, errorMessage: "Missing properties"}
             }
-            const dataValidators = await Promise.all([...dataArr].map(async (input) => await inputValidation(input, data)));
+            const dataValidators = options?.abortEarly ? await validateByStrategies.first(dataArr) : await validateByStrategies.all(dataArr);
 
             if (dataValidators.some((element) => !element)) {
-                return { error: true, dataErrors: dataErrors };
+                return { error: true, errors: errors };
             }
 
-            const dataRuleArr = Object.keys(dataRule).map((key) => ({ key, required: dataRule[key].required}));
+            const dataRuleArr = Object.keys(schema).map((key) => ({ key, required: schema[key].required}));
             const dataAttributesKey = dataArr.map((attribute) => attribute.key);
             const dataAttributesRequired = dataRuleArr.filter((rule) => rule.required).map((rule) => rule.key);
 
@@ -64,12 +105,16 @@ export function dataValidate(data, {validationHelpers = {}, rules, dataRule, dat
                 return { error: true };
             }
         } else if (!dataArr || dataArr.length === 0) {
-            return { error: true, errorMessage: "Missing fields for dataRules"}
+            return { error: true, errorMessage: "Missing fields for schema"}
         }
         return { ok: true };
     }
 
-    return validate();
+    function setData(newData) {
+        data = newData;
+    }
+
+    return {validate, validateField, setData};
 }
 
 /**

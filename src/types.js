@@ -13,8 +13,15 @@
  * @typedef {Object} DataValidatorConfigs
  * @property {ValidationHelpers} validationHelpers - The validator functions to help your validations
  * @property {Object} rules - The rules you want to use through validation
- * @property {dataRule} dataRule - The rules you want to use per field
- * @property {Object} dataErrorMessages - The error messages you want to show during errors
+ * @property {SchemaRule} schema - The rules you want to use per field
+ * @property {Object} errorMessages - The error messages you want to show during errors
+ * @property {ValidatorOption} options - Options
+ */
+
+/**
+ * @typedef {Object} ValidatorOption
+ * @property {boolean} propertiesMustMatch - If the form fields doesn't match with the expected structure will triggers an error
+ * @property {boolean} abortEarly - Stops when caughts the first error
  */
 
 /**
@@ -31,18 +38,18 @@
  */
 
 /**
- * @typedef {Object} DataRule
- * @property {dataRuleFiVeld} field - The field which will use the rule
+ * @typedef {Object} SchemaRule
+ * @property {SchemaRuleFiVeld} field - The field which will use the rule
  */
 
 /**
- * @typedef {Object} DataRuleField
+ * @typedef {Object} SchemaRuleField
  * @property {string} rule - The validation rule for the field (e.g., "name", "email", "phone", "hasText").
  * @property {boolean} required - Indicates whether the field is required.
  */
 
 /**
- * @typedef {Object.<string, DataRule>} DataRule - A dynamic object where the keys are field names and the values define the field rules.
+ * @typedef {Object.<string, SchemaRule>} SchemaRule - A dynamic object where the keys are field names and the values define the field rules.
  */
 
 /**

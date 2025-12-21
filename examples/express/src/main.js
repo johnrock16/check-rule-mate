@@ -1,7 +1,7 @@
 import express from 'express';
-import { dataValidate } from '../../../dist/main.js';
-import { expressValidator } from './dataValidator/validators.js';
-import MY_RULES from './dataValidator/rules/validators/myValidatorRules.json' with { type: 'json' };
+import { createValidator } from '../../../src/main.js';
+import { expressValidator } from './check-rule-mate-rules/validators.js';
+import MY_RULES from './check-rule-mate-rules/rules/myValidatorRules.json' with { type: 'json' };
 import MY_VALIDATION_ERROR_MESSAGES from './i18n/en_US/errors/myValidatorRules.json' with { type: 'json' };
 
 const app = express();
@@ -9,11 +9,11 @@ const port = 3000;
 
 const enumForm = {
     "CONTACT_US": async () => {
-        const response = await import("./dataValidator/rules/data/contactUs.json", { with: { type: "json" } });
+        const response = await import("./check-rule-mate-rules/schemas/contactUs.json", { with: { type: "json" } });
         return response.default;
     },
     "CUSTOMER_CREATION": async () => {
-        const response = await import("./dataValidator/rules/data/customerCreation.json", { with: { type: "json" } });
+        const response = await import("./check-rule-mate-rules/schemas/customerCreation.json", { with: { type: "json" } });
         return response.default;
     },
 }
@@ -28,7 +28,8 @@ async function formValidatorMiddleware(req, res, next) {
         res.status(400).json('invalid type');
         return;
     }
-    const dataValidated = await dataValidate(req.body.form, {validationHelpers: expressValidator, rules: MY_RULES, dataRule: RULES, dataErrorMessages: MY_VALIDATION_ERROR_MESSAGES});
+    const validator = createValidator(req.body.form, {validationHelpers: expressValidator, rules: MY_RULES, schema: RULES, errorMessages: MY_VALIDATION_ERROR_MESSAGES});
+    const dataValidated = await validator.validate();
     if (dataValidated.error) {
         res.status(400).json(dataValidated);
         return;
@@ -39,7 +40,7 @@ async function formValidatorMiddleware(req, res, next) {
 app.use(express.json());
 
 app.post('/form', formValidatorMiddleware, (req, res) => {
-    res.send('Form submitted!');
+    res.status(200).json({ok: true});
 });
 
 app.listen(port, () => {
