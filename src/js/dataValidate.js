@@ -1,11 +1,15 @@
+const DEFAUL_OPTIONS = { propertiesMustMatch: true, abortEarly: false, cache: true };
+
 /**
  * Validate your data fields using your rules, data rules and validators.
- * @param {[DataField]} dataParameter - All the data fields to be validate
+ * @param {[DataField]} data - All the data fields to be validate
  * @param {DataValidatorConfigs} config - The configs which will be followed during validation
  */
-export function createValidator(dataParameter, {validationHelpers = {}, rules, schema, errorMessages = {}, options = { propertiesMustMatch: true, abortEarly: false}}) {
+export function createValidator(data, {validationHelpers = {}, rules, schema, errorMessages = {}, options = DEFAUL_OPTIONS}) {
+    options = { ...DEFAUL_OPTIONS, ...options};
+    data = data;
     let errors = {};
-    let data = dataParameter;
+    let oldData = {};
 
     const validateByStrategies = {
         all: async (dataArr) => Promise.all([...dataArr].map(async (input) => await inputValidation(input, data))),
@@ -39,6 +43,12 @@ export function createValidator(dataParameter, {validationHelpers = {}, rules, s
     async function inputValidation(dataAttribute, data = null) {
         if (schema[dataAttribute.key]) {
             const { rule, required } = schema[dataAttribute.key];
+            const cacheEnabled = schema[dataAttribute.key]?.cache !== undefined ? schema[dataAttribute.key].cache : options.cache;
+
+            if (cacheEnabled && data[dataAttribute.key] === oldData[dataAttribute.key]?.value) {
+                return oldData[dataAttribute.key].isValid;
+            }
+
             if ((rule && required) || (!required && dataAttribute.value != '')) {
                 if (rule) {
                     const INPUT_RULE = rule.split('--')[0];
@@ -48,19 +58,19 @@ export function createValidator(dataParameter, {validationHelpers = {}, rules, s
                     if (!isValid) {
                         errors[dataAttribute.key] = {
                             name: dataAttribute.key,
-                            error: true,
-                            errorMessage: getObjectValueByPath(errorMessages, errorMessage) || errorMessage,
-                            errorType: errorType
+                            code: errorMessage,
+                            type: errorType,
+                            message: getObjectValueByPath(errorMessages, errorMessage) || ''
                         }
                     }
+                    oldData[dataAttribute.key] = {isValid: isValid, value: data[dataAttribute.key]};
                     return isValid;
                 }
             }
         } else if (options.propertiesMustMatch) {
             errors[dataAttribute.key] = {
                 name: dataAttribute.key,
-                error: true,
-                errorMessage: "Invalid property"
+                message: "Invalid property"
             }
             return false;
         }

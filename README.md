@@ -61,14 +61,14 @@ This separation makes the system flexible, scalable, and easy to maintain.
 - [Getting Started](#Getting-Started)
   - [NPM - Installation](#Installation)
   - [Repository - Installation](#Repository---Installation)
-  - [Running Tests](#Running-Tests)
+  - [Running Tests](#Repository---Running-Tests)
 - [How It Works](#How-It-Works)
-  - [Basic Example](#Basic-Example)
+  - [Basic Usage](#Basic-Usage)
 - [Defining Validation](#Defining-Validation)
   - [1. Schema](#Defining-a-Schema-What-to-validate)
   - [2. Rules](#Defining-Rules-How-to-validate)
   - [3. Validation Helpers](#Validation-Helpers-Execution-Layer)
-  - [4. Error Messages](#Error-Messages)
+  - [4. Error Messages](#Error-Messages-i18n-ready)
   - [5. Example Usage](#Example-Usage)
     - [Vanilla](#vanilla)
     - [Express](#express)
@@ -126,8 +126,9 @@ async function runFormValidate() {
     schema: CONTACT_US,
     errorMessages: ERROR_MESSAGES,
     options: {
+      cache: true,
       abortEarly: false,
-      propertiesMustMatch: true
+      propertiesMustMatch: true,
     }
   });
 
@@ -149,13 +150,15 @@ When is **valid**:
 ```
 
 When is **invalid** and **has errors**:
-```javascript
+```typescript
 {
-  error: true;
+  error: true,
   errors: {
     [field: string]: {
-      type: string;
-      message: string;
+      name: string,
+      type: string,
+      message: string,
+      code: string,
     }[];
   };
 }
@@ -175,11 +178,13 @@ Schemas map **data fields** to **rules**.
   },
   "email": {
     "rule": "email",
-    "required": true
+    "required": true,
+    "cache": false,
   },
   "emailConfirm": {
     "rule": "email--confirm",
-    "required": true
+    "required": true,
+    "cache": false,
   },
   "phone": {
     "rule": "phone",
@@ -191,6 +196,7 @@ Schemas map **data fields** to **rules**.
 #### Schema Properties
 - **rule**: Rule name (supports modifiers via `rule--modifier`)
 - **required**: Whether the field must exist and not be empty
+- **cache**: if this field will have cache or not
 
 ### Defining Rules (How to validate)
 
@@ -350,8 +356,9 @@ This makes localization and message customization straightforward.
 ### Validation Options
 ```typescript
 options: {
-  abortEarly?: boolean;          // Stop on first error
-  propertiesMustMatch?: boolean; // Schema vs data strictness
+  cache?: boolean,               // If cache is enabled or not
+  abortEarly?: boolean,          // Stop on first error
+  propertiesMustMatch?: boolean, // Schema vs data strictness
 }
 ```
 

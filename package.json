@@ -1,9 +1,10 @@
 {
   "name": "check-rule-mate",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "",
   "main": "./dist/main.cjs.js",
   "type": "commonjs",
+  "types": "index.d.ts",
   "keywords": [
     "data validation",
     "data validation js",

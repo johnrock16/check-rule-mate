@@ -6,7 +6,7 @@
 /**
  * @typedef {Object} DataField
  * @property {string} name - The name and key of the field
- * @property {string} value - the value of the field
+ * @property {any} value - the value of the field
  */
 
 /**
@@ -15,13 +15,14 @@
  * @property {Object} rules - The rules you want to use through validation
  * @property {SchemaRule} schema - The rules you want to use per field
  * @property {Object} errorMessages - The error messages you want to show during errors
- * @property {ValidatorOption} options - Options
+ * @property {ValidatorOptions} options - Options
  */
 
 /**
- * @typedef {Object} ValidatorOption
+ * @typedef {Object} ValidatorOptions
  * @property {boolean} propertiesMustMatch - If the form fields doesn't match with the expected structure will triggers an error
  * @property {boolean} abortEarly - Stops when caughts the first error
+ * @property {boolean} cache - Defines if the schema will uses cache as default or not
  */
 
 /**
@@ -39,13 +40,14 @@
 
 /**
  * @typedef {Object} SchemaRule
- * @property {SchemaRuleFiVeld} field - The field which will use the rule
+ * @property {SchemaRuleField} field - The field which will use the rule
  */
 
 /**
  * @typedef {Object} SchemaRuleField
  * @property {string} rule - The validation rule for the field (e.g., "name", "email", "phone", "hasText").
  * @property {boolean} required - Indicates whether the field is required.
+ * @property {boolean} cache - Indicates if the field requires cache or not
  */
 
 /**
@@ -65,5 +67,15 @@
  * @typedef {Object} DataValidatorErrorResponse
  * @property {boolean} error - Indicates an error occurred.
  * @property {string} [errorMessage] - A message describing the error (optional).
- * @property {Object} [dataErrors] - Additional error details (optional).
+ * @property {Object.<string, CheckError>} [errors] - Additional error details (optional).
+ */
+
+/**
+ *  Error Object
+ *
+ * @typedef {Object} CheckError
+ * @property {string} name - Field name
+ * @property {string} code - Error path (optional)
+ * @property {string} type - Error type (optional)
+ * @property {string} message - Error message (optional)
  */
