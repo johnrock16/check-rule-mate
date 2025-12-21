@@ -1,5 +1,5 @@
-import { dataValidate } from  './js/dataValidate.js';
+import { createValidator } from  './js/dataValidate.js';
 
 export {
-    dataValidate,
+    createValidator,
 }

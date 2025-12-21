@@ -1,11 +1,18 @@
 # check-rule-mate
-Validate any type of data in JS using your own rules and validations.
+Rule-based, extensible and async-friendly data validation engine for complex forms and business rules.
 
 ## Overview
 
-A lightweight and reusable JavaScript "library" for data validation. This library was designed to simplify the process of validating form inputs using flexible rules and error handling. Validating your data by allowing you to define flexible rules, custom error messages, and reusable helper functions—all in a structured format.
+**check-rule-mate** is a lightweight **rule-driven validation engine** for JavaScript.
+Instead of coupling validation logic directly to schemas or fields, check-rule-mate separates concerns into **rules**, **schemas**, **validators**, and **error messages**, allowing you to build **highly reusable**, **composable**, and **context-aware validations**.
 
-The core goal is to provide a **reusable and easy-to-extend** for handling various form inputs, including fields like name, email, birthdate, phone number, and more.
+It is designed for scenarios where traditional schema-based validators start to feel limiting, especially when you need:
+
+- Cross-field validation
+- Contextual rules
+- Async checks
+- Reusable validation logic across multiple forms
+- Full control over execution flow and error handling
 
 
 **Github repository:** [check-rule-mate repository](https://github.com/johnrock16/check-rule-mate)
@@ -15,49 +22,76 @@ The core goal is to provide a **reusable and easy-to-extend** for handling vario
 **Test the core functionalities here:** [check-rule-mate demo](https://johnrock16.github.io/check-rule-mate/)
 (Note: Creating or modifying custom validators is not supported in the demo, as it requires JavaScript implementation.)
 
+## Why check-rule-mate?
+
+Use **check-rule-mate** if you:
+- Need reusable validation logic across different forms and contexts
+- Have complex or conditional validation rules
+- Want full control over how validation runs
+- Need async validations (API calls, database checks, etc.)
+- Prefer rule-driven validation instead of tightly coupled schemas
+- Want clean separation between rules, data, and messages
+
+
+## Core Concepts
+
+check-rule-mate is built around four main concepts:
+
+1. **Rules**: How data is validated
+2. **Schema**: What should be validated
+3. **Validation Helpers**: How rules are executed
+4. **Error Messages**: How errors are communicated
+
+This separation makes the system flexible, scalable, and easy to maintain.
 
 ## Features
 
-- **Custom Validation Rules**: Easily define custom rules for form fields.
-- **Modular Design**: Separation of rule definitions and error messages for easy management.
-- **Easy Integration**: Can be used in any JavaScript environment.
-- **Clear Error Handling**: Handles errors and displays messages.
-- **Extendable**: Create your custom validators and rules and extend as you want.
-
-## Advanced Features
-
-- **Modifiers:** Extend rules for specific use cases (e.g., age validation in a date rule).
-- **Dynamic Parameters:** Use $variable to access field data within rules.
-- **Modular Rules and Validators:** Create multiple files for rules and helpers, organizing them by context or form.
-- **Async Validations:** You could create async functions to validate some data. Do You need to use a fetch or wait a promise to be resolved? No problems.
+- Rule-based validation engine
+- Reusable validation rules
+- Modifiers for contextual rule extensions
+- Cross-field validation using dynamic parameters
+- Async validation support
+- Abort early or collect all errors
+- Strict or loose schema matching
+- i18n-ready error messages
+- Framework-agnostic (frontend or backend)
 
 ## Table of Contents
 
 - [Getting Started](#Getting-Started)
-  - [Installation](#Installation)
+  - [NPM - Installation](#Installation)
+  - [Repository - Installation](#Repository---Installation)
   - [Running Tests](#Running-Tests)
 - [How It Works](#How-It-Works)
   - [Basic Example](#Basic-Example)
-- [Defining Validation Components](#Defining-Validation-Components)
-  - [1. Data Rules](#Data-Rules)
-  - [2. General Rules](#General-Rules)
-  - [3. Validation Helpers](#Validation-Helpers)
+- [Defining Validation](#Defining-Validation)
+  - [1. Schema](#Defining-a-Schema-What-to-validate)
+  - [2. Rules](#Defining-Rules-How-to-validate)
+  - [3. Validation Helpers](#Validation-Helpers-Execution-Layer)
   - [4. Error Messages](#Error-Messages)
   - [5. Example Usage](#Example-Usage)
     - [Vanilla](#vanilla)
     - [Express](#express)
     - [Frontend](#frontend)
+- [When NOT to use check-rule-mate](#When-NOT-to-use-check-rule-mate)
+- [License](#License);
 
 ## Getting Started
-### Installation
 
-To install and start the library, run:
+### Installation
+If you are in NPM use this:
+```bash
+npm install check-rule-mate
+```
+
+### Repository - Installation
+If you downloaded the repository you can install using:
 ```bash
 npm install
 npm start
 ```
 
-### Running Tests
+### Repository - Running Tests
 
 Execute the test suite with:
 ```bash
@@ -65,69 +99,102 @@ npm test
 ```
 
 ## How It Works
-### Basic Example
+### Basic Usage
 
-Here’s an example of validating a set of fields:
 ```javascript
-  const { myValidator } = require('./dataValidator/validators');
-  const { dataValidate } = require('./dataValidator/dataValidate');
-  const MY_RULES = require('./dataValidator/rules/validators/myValidatorRules.json');
-  const CONTACT_US = require('./dataValidator/rules/data/contactUs.json');
-  const MY_VALIDATION_ERROR_MESSAGES = require('./i18n/en_US/errors/myValidatorRules.json');
+import MY_RULES from './rules/myValidatorRules.json' with { type: 'json' };
+import CONTACT_US from './schemas/contactUs.json' with { type: 'json' };
+import ERROR_MESSAGES from './i18n/en_US/errors.json' with { type: 'json' };
 
-  async function runDataValidate() {
-    const fields = {
-      name: "John",
-      lastName: "Doe",
-      email: "email@email.com",
-      emailConfirm: "email@email.com",
-      phone: "",
-      subject: "I need a coffee",
-      message: "Give me coffee"
-    };
+import { createValidator } from 'check-rule-mate';
+import { myValidator } from './validators/myValidator.js';
 
-    // This should return { ok: true }
-    const result = await dataValidate(fields, {
-      validationHelpers: myValidator,
-      rules: MY_RULES,
-      dataRule: CONTACT_US,
-      dataErrorMessages: MY_VALIDATION_ERROR_MESSAGES,
-    });
+const fields = {
+  name: 'John',
+  lastName: 'Doe',
+  email: 'email@email.com',
+  emailConfirm: 'email@email.com',
+  phone: '',
+  subject: 'I need a coffee',
+  message: 'Give me coffee'
+};
 
-    console.log(result);
-  }
+async function runFormValidate() {
+  const validator = createValidator(fields, {
+    validationHelpers: myValidator,
+    rules: MY_RULES,
+    schema: CONTACT_US,
+    errorMessages: ERROR_MESSAGES,
+    options: {
+      abortEarly: false,
+      propertiesMustMatch: true
+    }
+  });
 
-  runDataValidate();
+  const result = await validator.validate();
+
+  // This should return { ok: true }
+  console.log(result);
+}
+
+runFormValidate();
 ```
 
-#### Parameters for dataValidate:
+### Validation Result
+A validation result follows this structure:
 
-- **fields**: The object containing data to be validated.
-- **validationHelpers**: Functions to validate field data (see /dataValidator/validators).
-- **rules**: General validation rules for your application.
-- **dataRule**: Specific rules linking fields to validation logic.
-- **dataErrorMessages**: Custom error messages returned upon validation failure.
+When is **valid**:
+```javascript
+{ ok: true }
+```
 
-## Defining Validation Components
-
-### Data Rules
-
-Define rules for specific datasets, such as forms. Example for a "Contact Us" form:
-```json
+When is **invalid** and **has errors**:
+```javascript
 {
-  "name": { "rule": "name", "required": true },
-  "lastName": { "rule": "name", "required": true },
-  "email": { "rule": "email", "required": true },
-  "emailConfirm": { "rule": "email--confirm", "required": true },
-  "phone": { "rule": "phone", "required": false },
-  "subject": { "rule": "hasText", "required": true },
-  "message": { "rule": "hasText", "required": true }
+  error: true;
+  errors: {
+    [field: string]: {
+      type: string;
+      message: string;
+    }[];
+  };
 }
 ```
 
-### General Rules
 
-Define reusable validation logic. Example:
+## Defining Validation
+
+### Defining a Schema (What to validate)
+
+Schemas map **data fields** to **rules**.
+```json
+{
+  "name": {
+    "rule": "name",
+    "required": true
+  },
+  "email": {
+    "rule": "email",
+    "required": true
+  },
+  "emailConfirm": {
+    "rule": "email--confirm",
+    "required": true
+  },
+  "phone": {
+    "rule": "phone",
+    "required": false
+  }
+}
+```
+
+#### Schema Properties
+- **rule**: Rule name (supports modifiers via `rule--modifier`)
+- **required**: Whether the field must exist and not be empty
+
+### Defining Rules (How to validate)
+
+Rules define validation logic, independent of any specific form.
 
 ```json
 {
@@ -169,17 +236,53 @@ Define reusable validation logic. Example:
   }
 }
 ```
-#### Key Components:
 
-- **validate**: Array of functions to execute for validation.
-- **error**: Error messages for validation failures.
-- **regex**: Regular expression for validation.
-- **modifier**: Overrides specific rules with additional validations.
-- **params**: Parameters for validation functions (e.g., $email accesses email field data).
+#### Rule Properties
+
+- **validate**: Ordered list of validation functions
+- **regex**: Optional regex used by the regex helper
+- **error**: Error keys mapped to validation functions
+- **modifier**: Contextual rule extensions
+- **params**: Parameters passed to validation helpers
+
+#### Modifiers (Contextual Rules)
+Modifiers allow extending a rule **without duplicating logic**.
+
+Example:
+```json
+"email--confirm"
+```
+
+Internally:
+
+- Base rule: email
+- Modifier: confirm
+
+Modifiers can override:
+
+- validate
+- params
+- regex
+- error
+
+This makes rules highly reusable and expressive.
+
+#### Dynamic Parameters ($field)
+Rules can reference other fields dynamically:
+
+```json
+"params": {
+  "equals": ["$email"]
+}
+```
+
+At runtime:
+- `$email` resolves to `data.email`
+- Enables **cross-field validation**
 
 
-### Validation Helpers
-Helper functions perform actual validation. Example:
+### Validation Helpers (Execution Layer)
+Validation helpers are the **runtime implementation** of rules.
 
 ```javascript
 const myValidator = function (value, rule, modifier = null, data = null) {
@@ -219,13 +322,36 @@ const myValidator = function (value, rule, modifier = null, data = null) {
 };
 ```
 
-### Error Messages
+#### Helper Signature
+```typescript
+(value, rule, modifier?, data?) => Record<string, Function>
+```
 
-Define custom error messages in a structured format:
+Helpers:
+- Can be **sync or async**
+- Are **stateless**
+- Do not know about schemas or error messages
+
+### Error Messages (i18n-ready)
+Errors are resolved via keys, not hardcoded strings.
 ``` json
 {
-  "common": { "hasText": "Please fill out this field." },
-  "email": { "regex": "Enter a valid email address." }
+  "common": {
+    "hasText": "Please fill the field"
+  },
+  "email": {
+    "regex": "Please enter a valid email",
+    "equals": "Emails do not match"
+  }
+}
+```
+This makes localization and message customization straightforward.
+
+### Validation Options
+```typescript
+options: {
+  abortEarly?: boolean;          // Stop on first error
+  propertiesMustMatch?: boolean; // Schema vs data strictness
 }
 ```
 
@@ -270,3 +396,12 @@ npm run example:express
 Here you can found the DEMO page and it's a type of "playground" to test how RULES works and validations works. (Here you can't create customized javascript so custom validatorHelpers are disabled by default)
 
 **Frontend example:** [check-rule-mate demo.](https://johnrock16.github.io/check-rule-mate/)
+
+
+## When NOT to use check-rule-mate
+- Simple one-off forms
+- Basic required-only validation
+- When schema-based validation is enough
+
+## License
+- ISC
