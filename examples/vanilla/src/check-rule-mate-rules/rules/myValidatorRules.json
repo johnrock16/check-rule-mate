@@ -3,12 +3,19 @@
         "validate": ["hasText"],
         "error": {
             "hasText": "common.hasText"
+        },
+        "docs": {
+            "description": "Used to validate names based if they have text or not.",
+            "notes": "You can add your special note here."
         }
     },
     "hasText": {
         "validate": ["hasText"],
         "error": {
             "hasText": "common.hasText"
+        },
+        "docs": {
+            "description": "Used to validate if a text field is not blank."
         }
     },
     "email":{
@@ -26,8 +33,15 @@
                 "error": {
                     "regex": "email.regex",
                     "equals": "email.equals"
+                },
+                "docs": {
+                    "description": "Used to validate if email confirm fields are valid emails and matches with the primary email field."
                 }
             }
+        },
+        "docs": {
+            "description": "Used to validate email fields. Checking if hasText and if matches with a valid format for emails.",
+            "notes": "To use email confirm modifier use email--confirm"
         }
     },
     "phone":{
@@ -35,6 +49,10 @@
         "validate": ["regex"],
         "error": {
             "regex": "phone.regex"
+        },
+        "docs": {
+            "description": "Checks if phone number has a valid format.",
+            "notes": "Only works for Brazilian's phone numbers"
         }
     },
     "date": {
@@ -55,12 +73,20 @@
                     "validateAge": "date.modifier.age.validateAge"
                 }
             }
+        },
+        "docs": {
+            "description": "Used to validate a date format in date or string fields",
+            "notes": "Can validate someone age based on birthdate through the date--age modifier"
         }
     },
     "cpf":{
         "validate": ["cpf"],
         "error": {
             "cpf": "cpf.cpf"
+        },
+        "docs": {
+            "description": "Used to check if someone CPF is valid or not",
+            "notes": "CPF is a ID document which only works in Brazil"
         }
     }
 }

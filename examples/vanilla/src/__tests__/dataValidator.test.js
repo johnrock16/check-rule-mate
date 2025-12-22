@@ -1,4 +1,4 @@
-import { myValidator, nameValidator } from '../check-rule-mate-rules/validators.js';
+import { myValidator, nameValidator } from '../check-rule-mate-rules/validators/validators.js';
 import { createValidator }  from '../../../../src/main.js';
 import MY_RULES from '../check-rule-mate-rules/rules/myValidatorRules.json' with { type: 'json' };
 import CONTACT_US from '../check-rule-mate-rules/schemas/contactUs.json' with { type: 'json' };
