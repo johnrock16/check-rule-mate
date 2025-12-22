@@ -101,7 +101,7 @@ describe('dataValidator', () => {
                 }
                 const validator = createValidator(fieldsFilledWrong, {validationHelpers: myValidator, rules: MY_RULES, schema: CONTACT_US, errorMessages: MY_VALIDATOR_ERROR_MESSAGES});
                 const dataValidated = await validator.validate();
-                expect(dataValidated.errors.name.errorMessage).toBe("Please, fill the field");
+                expect(dataValidated.errors.name.message).toBe("Please, fill the field");
             });
 
             test('filled wrong without error messages', async () => {
@@ -116,7 +116,7 @@ describe('dataValidator', () => {
                 }
                 const validator = createValidator(fieldsFilledWrong, {validationHelpers: myValidator, rules: MY_RULES, schema: CONTACT_US});
                 const dataValidated = await validator.validate();
-                expect(dataValidated.errors.name.errorMessage).toBe("common.hasText");
+                expect(dataValidated.errors.name.code).toBe("common.hasText");
             });
 
             test('filled all fields wrong', async () => {
@@ -323,7 +323,7 @@ describe('dataValidator', () => {
                 }
                 const validator = createValidator(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, schema: CUSTOMER_CREATION});
                 const dataValidated = await validator.validate();
-                expect(dataValidated.errors.birthdate.errorType).toBe('regex');
+                expect(dataValidated.errors.birthdate.type).toBe('regex');
             });
 
             test('filled birthdate invalid age (under 18)', async () => {
@@ -337,7 +337,7 @@ describe('dataValidator', () => {
                 }
                 const validator = createValidator(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, schema: CUSTOMER_CREATION});
                 const dataValidated = await validator.validate();
-                expect(dataValidated.errors.birthdate.errorType).toBe('validateAge');
+                expect(dataValidated.errors.birthdate.type).toBe('validateAge');
             });
         });
     });
@@ -378,7 +378,7 @@ describe('dataValidator', () => {
                 }
                 const validator = createValidator(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, schema: MY_ACCOUNT, errorMessages: MY_VALIDATOR_ERROR_MESSAGES});
                 const dataValidated = await validator.validate();
-                expect(dataValidated.errors.emailConfirm.errorType).toBe('equals');
+                expect(dataValidated.errors.emailConfirm.type).toBe('equals');
             });
 
             test('filled email confirm are not correct email format', async () => {
@@ -393,7 +393,7 @@ describe('dataValidator', () => {
                 }
                 const validator = createValidator(fieldsFilledCorrectly, {validationHelpers: myValidatorMocked, rules: MY_RULES, schema: MY_ACCOUNT, errorMessages: MY_VALIDATOR_ERROR_MESSAGES});
                 const dataValidated = await validator.validate();
-                expect(dataValidated.errors.emailConfirm.errorType).toBe('regex');
+                expect(dataValidated.errors.emailConfirm.type).toBe('regex');
             });
         });
     });
