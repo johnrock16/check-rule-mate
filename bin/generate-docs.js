@@ -15,14 +15,15 @@ const process = require('process')
  * CLI ARGS
  * -------------------------------------*/
 const args = process.argv.slice(2);
-// const getArg = (flag) => {
-//   const index = args.indexOf(flag);
-//   return index !== -1 ? args[index + 1] : null;
-// };
+const getArg = (flag) => {
+  const index = args.indexOf(flag);
+  return index !== -1 ? args[index + 1] : null;
+};
 
-const RULES_DIR = args[0];
-const SCHEMAS_DIR = args[1];
-const OUTPUT = args[2] || "check-rule-mate-docs.html";
+const RULES_DIR = getArg('--rules');
+const SCHEMAS_DIR = getArg('--schemas');
+const ERRORS_DIR = getArg('--errors')
+const OUTPUT = getArg('--out') || "check-rule-mate-docs.html";
 
 if (!RULES_DIR || !SCHEMAS_DIR) {
   console.error(`
@@ -46,7 +47,7 @@ const readJSONFiles = (dir) => {
 
 const rulesFiles = readJSONFiles(RULES_DIR);
 const schemasFiles = readJSONFiles(SCHEMAS_DIR);
-const errorsFiles = readJSONFiles('./examples/vanilla/src/i18n/en_US/errors');
+const errorsFiles = readJSONFiles(ERRORS_DIR);
 
 
 /* ---------------------------------------
