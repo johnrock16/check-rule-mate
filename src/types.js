@@ -16,6 +16,7 @@
  * @property {SchemaRule} schema - The rules you want to use per field
  * @property {Object} errorMessages - The error messages you want to show during errors
  * @property {ValidatorOptions} options - Options
+ * @property {ValidatorHooks} hooks - The hooks you want to execute in some specific phase of validation
  */
 
 /**
@@ -74,8 +75,78 @@
  *  Error Object
  *
  * @typedef {Object} CheckError
- * @property {string} name - Field name
+ * @property {string} name - Error name
+ * @property {string} field - Field name (optional)
  * @property {string} code - Error path (optional)
  * @property {string} type - Error type (optional)
  * @property {string} message - Error message (optional)
+ * @property {boolean} internal - Flag to know if it is a internal error (optional)
+ */
+
+
+/**
+ * @typedef {Object} ValidatorHooks
+ * @property {onValidateStart} onValidateStart - Executed before validation runs
+ * @property {onValidateFieldStart} onValidateFieldStart - Executed before validation runs for each field
+ * @property {onValidateFieldError} onValidateFieldError - Executed when validation fails for some field
+ * @property {onValidateFieldSuccess} onValidateFieldSuccess - Executed when validation has success for some field
+ * @property {onValidateEnd} onValidateEnd - Executed after validation runs
+ */
+
+/**
+ * @typedef {Function} onValidateStart
+ * @property {onValidateStartPayload} payload - Returns the payload of validate form hook
+ */
+
+/**
+ * @typedef {Object} onValidateStartPayload
+ * @property {Object} data - Returns the form data
+ */
+
+/**
+ * @typedef {Function} onValidateFieldStart
+ * @property {onValidateFieldStartPayload} payload - Returns the payload of validate field hook
+ */
+
+/**
+ * @typedef {Object} onValidateFieldStartPayload
+ * @property {string} field - Returns the field name
+ * @property {any} value - Returns the value of field
+ * @property {SchemaRuleField} schemaField - Returns the schema field
+ */
+
+/**
+ * @typedef {Function} onValidateFieldError
+ * @property {onValidateFieldErrorPayload} payload - Returns the payload of validate field error hook
+ */
+
+/**
+ * @typedef {Object} onValidateFieldErrorPayload
+ * @property {string} field - Returns the field name
+ * @property {string} value - Returns the value of field
+ * @property {SchemaRuleField} schemaField - Returns the schema field
+ * @property {CheckError} error - Returns the error data
+ */
+
+/**
+ * @typedef {Function} onValidateFieldSuccess
+ * @property {onValidateFieldSuccessPayload} payload - Returns the payload of validate field success hook
+ */
+
+/**
+ * @typedef {Object} onValidateFieldSuccessPayload
+ * @property {string} field - Returns the field name
+ * @property {string} value - Returns the value of field
+ * @property {SchemaRuleField} schemaField - Returns the schema field
+ */
+
+/**
+ * @typedef {Function} onValidateEnd
+ * @property {onValidateEndPayload} payload - Returns the payload of validate form hook
+ */
+
+/**
+ * @typedef {Object} onValidateEndPayload
+ * @property {Object} data - Returns the form data
+ * @property {DataValidatorErrorResponse} errors - Returns the errors of validation if had
  */

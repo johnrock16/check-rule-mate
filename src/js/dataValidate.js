@@ -5,7 +5,7 @@ const DEFAUL_OPTIONS = { propertiesMustMatch: true, abortEarly: false, cache: tr
  * @param {[DataField]} data - All the data fields to be validate
  * @param {DataValidatorConfigs} config - The configs which will be followed during validation
  */
-export function createValidator(data, {validationHelpers = {}, rules, schema, errorMessages = {}, options = DEFAUL_OPTIONS}) {
+export function createValidator(data, {validationHelpers = {}, rules, schema, errorMessages = {}, hooks = {}, options = DEFAUL_OPTIONS}) {
     options = { ...DEFAUL_OPTIONS, ...options};
     data = data;
     let errors = {};
@@ -41,6 +41,7 @@ export function createValidator(data, {validationHelpers = {}, rules, schema, er
     }
 
     async function inputValidation(dataAttribute, data = null) {
+        hookTrigger('onValidateFieldStart', { field: dataAttribute.key, value: dataAttribute.value, schemaField: schema[dataAttribute.key] || null });
         if (schema[dataAttribute.key]) {
             const { rule, required } = schema[dataAttribute.key];
             const cacheEnabled = schema[dataAttribute.key]?.cache !== undefined ? schema[dataAttribute.key].cache : options.cache;
@@ -56,24 +57,36 @@ export function createValidator(data, {validationHelpers = {}, rules, schema, er
                     const dataAttributeValidation = dataAttributeValidator(dataAttribute.value, rules[INPUT_RULE], RULE_MODIFIER, validationHelpers, data);
                     const { isValid, errorMessage, errorType } = await dataAttributeValidation.validate();
                     if (!isValid) {
-                        errors[dataAttribute.key] = {
+                        const error = {
                             name: dataAttribute.key,
+                            field: dataAttribute.key,
                             code: errorMessage,
                             type: errorType,
                             message: getObjectValueByPath(errorMessages, errorMessage) || ''
-                        }
+                        };
+
+                        errors[dataAttribute.key] = error;
+                        hookTrigger('onValidateFieldError', { field: dataAttribute.key, value: dataAttribute.value, schemaField: schema[dataAttribute.key] , error: error });
+                    } else {
+                        hookTrigger('onValidateFieldSuccess', { field: dataAttribute.key, value: dataAttribute.value, schemaField: schema[dataAttribute.key] });
                     }
                     oldData[dataAttribute.key] = {isValid: isValid, value: data[dataAttribute.key]};
                     return isValid;
                 }
             }
         } else if (options.propertiesMustMatch) {
-            errors[dataAttribute.key] = {
+            const error = {
                 name: dataAttribute.key,
-                message: "Invalid property"
+                field: dataAttribute.key,
+                message: "Invalid property",
+                internal: true
             }
+
+            errors[dataAttribute.key] = error;
+            hookTrigger('onValidateFieldError', { field: dataAttribute.key, value: dataAttribute.value, error: error });
             return false;
         }
+        hookTrigger('onValidateFieldSuccess', { field: dataAttribute.key, value: dataAttribute.value });
         return true;
     }
 
@@ -95,15 +108,18 @@ export function createValidator(data, {validationHelpers = {}, rules, schema, er
      * @returns {DataValidatorSuccessResponse | DataValidatorErrorResponse} - The response of your validation
      */
     async function validate() {
+        hookTrigger('onValidateStart', { data });
         errors = {};
         let dataArr = Object.keys(data).map((key) => ({ key, value: data[key] }));
         if (dataArr && dataArr.length > 0) {
             if(!Object.keys(schema).every((key) => data.hasOwnProperty(key))) {
+                hookTrigger('onValidateEnd', { data, errors: [{name: 'internal: schema - missing properties' , message: 'Missing properties', internal: true}] });
                 return { error: true, errorMessage: "Missing properties"}
             }
             const dataValidators = options?.abortEarly ? await validateByStrategies.first(dataArr) : await validateByStrategies.all(dataArr);
 
             if (dataValidators.some((element) => !element)) {
+                hookTrigger('onValidateEnd', { data, errors: errors });
                 return { error: true, errors: errors };
             }
 
@@ -112,12 +128,25 @@ export function createValidator(data, {validationHelpers = {}, rules, schema, er
             const dataAttributesRequired = dataRuleArr.filter((rule) => rule.required).map((rule) => rule.key);
 
             if (!dataAttributesRequired.every((fieldRequired) => dataAttributesKey.includes(fieldRequired))) {
-                return { error: true };
+                const error = { error: true };
+
+                hookTrigger('onValidateEnd', { data, errors: [{name: 'internal: fields - required' , message: '', internal: true}] });
+                return error;
             }
         } else if (!dataArr || dataArr.length === 0) {
-            return { error: true, errorMessage: "Missing fields for schema"}
+            const error = { error: true, errorMessage: "Missing fields for schema"};
+
+            hookTrigger('onValidateEnd', { data, errors: [{name: 'internal: schema - missing fields' , message: error.errorMessage, internal: true}] });
+            return error;
         }
+        hookTrigger('onValidateEnd', { data });
         return { ok: true };
+    }
+
+    function hookTrigger(hookName, parameters) {
+        if (hooks?.[hookName] && typeof hooks[hookName] === 'function') {
+            hooks[hookName]({...parameters});
+        }
     }
 
     function setData(newData) {
