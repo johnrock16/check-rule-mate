@@ -4,8 +4,8 @@ import MY_RULES from '../check-rule-mate-rules/rules/myValidatorRules.json' with
 import CONTACT_US from '../check-rule-mate-rules/schemas/contactUs.json' with { type: 'json' };
 import CUSTOMER_CREATION from '../check-rule-mate-rules/schemas/customerCreation.json' with { type: 'json' };
 import MY_ACCOUNT from '../check-rule-mate-rules/schemas/myAccount.json' with { type: 'json' };
-import NAME_RULE from '../check-rule-mate-rules/rules/name.rule.json' with { type: 'json' };
-import NAME_DATA_RULE from '../check-rule-mate-rules/schemas/name.data.rule.json' with { type: 'json' };
+import NAME_RULE from '../check-rule-mate-rules/rules/nameSpecialValidationRules.json' with { type: 'json' };
+import NAME_DATA_RULE from '../check-rule-mate-rules/schemas/nameSpecialValidationRules.json' with { type: 'json' };
 import MY_VALIDATOR_ERROR_MESSAGES from '../i18n/en_US/errors/myValidatorRules.json' with { type: 'json' };
 
 describe('dataValidator', () => {
