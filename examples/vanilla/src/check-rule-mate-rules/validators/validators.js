@@ -1,4 +1,4 @@
-import { regexStringToExpression, isValidDate, calculateAge, validateCPF } from "./util.js";
+import { regexStringToExpression, isValidDate, calculateAge, validateCPF } from "../util.js";
 
 export const myValidator = function (value, rule, modifier = null, data = null) {
     function regex() {
