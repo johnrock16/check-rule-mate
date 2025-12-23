@@ -9,7 +9,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const process = require('process')
+const process = require('process');
 
 /* ---------------------------------------
  * CLI ARGS
@@ -28,7 +28,7 @@ const OUTPUT = getArg('--out') || "check-rule-mate-docs.html";
 if (!RULES_DIR || !SCHEMAS_DIR) {
   console.error(`
 Usage:
-npx check-rule-mate-auto-docs --rules ./rules --schemas ./schemas --out docs.html
+npx check-rule-mate-auto-docs --rules ./rules --schemas ./schemas --errors ./errors --out docs.html
 `);
   process.exit(1);
 }
