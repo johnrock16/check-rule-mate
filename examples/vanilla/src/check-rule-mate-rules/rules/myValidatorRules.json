@@ -70,7 +70,7 @@
                 },
                 "error": {
                     "regex": "common.dateFormat",
-                    "validateAge": "date.modifier.age.validateAge"
+                    "validateAge": "date.validateAge"
                 }
             }
         },

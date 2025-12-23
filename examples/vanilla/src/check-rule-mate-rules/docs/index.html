@@ -89,6 +89,7 @@
     display: inline-block;
     margin-bottom: 8px;
     background: rgba(239,68,68,0.2);
+    text-decoration: none;
   }
 
   .tag.modifier {
@@ -158,6 +159,19 @@
       <a href="#rule-cpf">myValidatorRules - cpf</a>
     
       <a href="#rule-name">nameSpecialValidationRules - name</a>
+    
+
+  <h3>Errors</h3>
+  
+      <a href="#error-common">myValidatorRules - common</a>
+    
+      <a href="#error-email">myValidatorRules - email</a>
+    
+      <a href="#error-phone">myValidatorRules - phone</a>
+    
+      <a href="#error-date">myValidatorRules - date</a>
+    
+      <a href="#error-name">myValidatorRules - name</a>
     
 </aside>
 
@@ -512,7 +526,7 @@
       <h3>Error Codes</h3>
       
     <ul>
-      <li><span class="tag error">hasText</span> common.hasText</li>
+      <li><a href="#error-common" class="tag error">hasText</a> common.hasText</li>
     </ul>
   
 
@@ -545,7 +559,7 @@
       <h3>Error Codes</h3>
       
     <ul>
-      <li><span class="tag error">hasText</span> common.hasText</li>
+      <li><a href="#error-common" class="tag error">hasText</a> common.hasText</li>
     </ul>
   
 
@@ -575,7 +589,7 @@
       <h3>Error Codes</h3>
       
     <ul>
-      <li><span class="tag error">regex</span> email.regex</li>
+      <li><a href="#error-email" class="tag error">regex</a> email.regex</li>
     </ul>
   
 
@@ -597,9 +611,10 @@
               <div class="flow-step success">valid</div>
             </div>
 
+            <h4>Error Codes</h4>
             
     <ul>
-      <li><span class="tag error">regex</span> email.regex</li><li><span class="tag error">equals</span> email.equals</li>
+      <li><a href="#error-email" class="tag error">regex</a> email.regex</li><li><a href="#error-email" class="tag error">equals</a> email.equals</li>
     </ul>
   
           </div>
@@ -633,7 +648,7 @@
       <h3>Error Codes</h3>
       
     <ul>
-      <li><span class="tag error">regex</span> phone.regex</li>
+      <li><a href="#error-phone" class="tag error">regex</a> phone.regex</li>
     </ul>
   
 
@@ -669,7 +684,7 @@
       <h3>Error Codes</h3>
       
     <ul>
-      <li><span class="tag error">regex</span> common.dateFormat</li><li><span class="tag error">validDate</span> date.validDate</li>
+      <li><a href="#error-common" class="tag error">regex</a> common.dateFormat</li><li><a href="#error-date" class="tag error">validDate</a> date.validDate</li>
     </ul>
   
 
@@ -691,9 +706,10 @@
               <div class="flow-step success">valid</div>
             </div>
 
+            <h4>Error Codes</h4>
             
     <ul>
-      <li><span class="tag error">regex</span> common.dateFormat</li><li><span class="tag error">validateAge</span> date.modifier.age.validateAge</li>
+      <li><a href="#error-common" class="tag error">regex</a> common.dateFormat</li><li><a href="#error-date" class="tag error">validateAge</a> date.validateAge</li>
     </ul>
   
           </div>
@@ -727,7 +743,7 @@
       <h3>Error Codes</h3>
       
     <ul>
-      <li><span class="tag error">cpf</span> cpf.cpf</li>
+      <li><a href="#error-cpf" class="tag error">cpf</a> cpf.cpf</li>
     </ul>
   
 
@@ -760,7 +776,7 @@
       <h3>Error Codes</h3>
       
     <ul>
-      <li><span class="tag error">nameSpecialValidation</span> name.nameSpecialValidation</li>
+      <li><a href="#error-name" class="tag error">nameSpecialValidation</a> name.nameSpecialValidation</li>
     </ul>
   
 
@@ -774,6 +790,99 @@
       
     </section>
     
+  
+    <section id="error-common" class="card">
+      <h2>Error: common (myValidatorRules)</h2>
+      <ul>
+      
+        <li><span class="tag error">hasText</span> Please, fill the field </li>
+      
+        <li><span class="tag error">dateFormat</span> Please, fill the field with a valid date </li>
+      
+      </ul>
+
+      <h3>Used by Rules</h3>
+      <ul>
+        
+          <li>myValidatorRules → <strong>name</strong> (common.hasText)</li><li>myValidatorRules → <strong>hasText</strong> (common.hasText)</li>
+        
+          <li>myValidatorRules → <strong>date</strong> (common.dateFormat)</li><li>myValidatorRules → <strong>date</strong> (common.dateFormat)</li>
+        
+      </ul>
+    </section>
+  
+    <section id="error-email" class="card">
+      <h2>Error: email (myValidatorRules)</h2>
+      <ul>
+      
+        <li><span class="tag error">regex</span> Please, fill the field with a valid e-mail </li>
+      
+        <li><span class="tag error">equals</span> The email and email confirm are not equals </li>
+      
+      </ul>
+
+      <h3>Used by Rules</h3>
+      <ul>
+        
+          <li>myValidatorRules → <strong>email</strong> (email.regex)</li><li>myValidatorRules → <strong>email</strong> (email.regex)</li>
+        
+          <li>myValidatorRules → <strong>email</strong> (email.equals)</li>
+        
+      </ul>
+    </section>
+  
+    <section id="error-phone" class="card">
+      <h2>Error: phone (myValidatorRules)</h2>
+      <ul>
+      
+        <li><span class="tag error">regex</span> Please, fill the field with a valid phone </li>
+      
+      </ul>
+
+      <h3>Used by Rules</h3>
+      <ul>
+        
+          <li>myValidatorRules → <strong>phone</strong> (phone.regex)</li>
+        
+      </ul>
+    </section>
+  
+    <section id="error-date" class="card">
+      <h2>Error: date (myValidatorRules)</h2>
+      <ul>
+      
+        <li><span class="tag error">validDate</span> Please, fill the field with a existent date </li>
+      
+        <li><span class="tag error">validateAge</span> Invalid age, under 18 </li>
+      
+      </ul>
+
+      <h3>Used by Rules</h3>
+      <ul>
+        
+          <li>myValidatorRules → <strong>date</strong> (date.validDate)</li>
+        
+          <li>myValidatorRules → <strong>date</strong> (date.validateAge)</li>
+        
+      </ul>
+    </section>
+  
+    <section id="error-name" class="card">
+      <h2>Error: name (myValidatorRules)</h2>
+      <ul>
+      
+        <li><span class="tag error">nameSpecialValidation</span> Please, fill the field following fields: name, email and cellphone </li>
+      
+      </ul>
+
+      <h3>Used by Rules</h3>
+      <ul>
+        
+          <li>nameSpecialValidationRules → <strong>name</strong> (name.nameSpecialValidation)</li>
+        
+      </ul>
+    </section>
+  
 </main>
 
 <script>

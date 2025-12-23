@@ -46,12 +46,14 @@ const readJSONFiles = (dir) => {
 
 const rulesFiles = readJSONFiles(RULES_DIR);
 const schemasFiles = readJSONFiles(SCHEMAS_DIR);
+const errorsFiles = readJSONFiles('./examples/vanilla/src/i18n/en_US/errors');
 
 
 /* ---------------------------------------
  * INDEX RELATIONSHIPS
  * -------------------------------------*/
 const ruleUsageMap = {};
+const errorUsageMap = {}
 
 schemasFiles.forEach(schemaFile => {
   Object.entries(schemaFile.content).forEach(([field, config]) => {
@@ -64,6 +66,36 @@ schemasFiles.forEach(schemaFile => {
     });
   });
 });
+
+rulesFiles.forEach(rulesFile => {
+  Object.entries(rulesFile.content).forEach(([field, config]) => {
+    Object.entries(config.error).forEach(([key, value]) => {
+      const errorName = value;
+      if (!errorUsageMap[errorName]) errorUsageMap[errorName] = [];
+      errorUsageMap[errorName].push({
+        file: rulesFile.name,
+        field,
+        error: value
+      });
+    });
+    if (config?.modifier) {
+      Object.entries(config.modifier).forEach(([modifierKey, modifier]) => {
+        if (modifier?.error) {
+          Object.entries(modifier.error).forEach(([key, value]) => {
+            const errorName = value;
+            if (!errorUsageMap[errorName]) errorUsageMap[errorName] = [];
+            errorUsageMap[errorName].push({
+              file: rulesFile.name,
+              field,
+              error: value
+            });
+          });
+        }
+      });
+    }
+  });
+});
+
 
 /* ---------------------------------------
  * HTML GENERATION
@@ -94,6 +126,13 @@ ${generateCSS()}
       <a href="#rule-${rule}">${rf.name} - ${rule}</a>
     `).join("")
   ).join("")}
+
+  <h3>Errors</h3>
+  ${errorsFiles.map(errorFile =>
+    Object.keys(errorFile.content).map(error => `
+      <a href="#error-${error}">${errorFile.name} - ${error}</a>
+    `).join("")
+  ).join("")}
 </aside>
 
 <main>
@@ -106,6 +145,7 @@ ${generateCSS()}
 
   ${renderSchemas(schemasFiles)}
   ${renderRules(rulesFiles, ruleUsageMap)}
+  ${renderErrors(errorsFiles, errorUsageMap)}
 </main>
 
 <script>
@@ -174,7 +214,7 @@ function renderRules(rulesFiles, usageMap) {
       </div>
 
       <h3>Error Codes</h3>
-      ${renderErrors(rule.error)}
+      ${renderRulesErrors(rule.error)}
 
       ${rule.modifier ? `
         <h3>Modifiers</h3>
@@ -191,7 +231,8 @@ function renderRules(rulesFiles, usageMap) {
               <div class="flow-step success">valid</div>
             </div>
 
-            ${renderErrors(modRule.error)}
+            <h4>Error Codes</h4>
+            ${renderRulesErrors(modRule.error)}
           </div>
         `).join("")}
       ` : ""}
@@ -214,14 +255,37 @@ function renderRules(rulesFiles, usageMap) {
   ).join("");
 }
 
-function renderErrors(errors = {}) {
+function renderRulesErrors(errors = {}) {
   return `
     <ul>
       ${Object.entries(errors).map(([k, v]) =>
-        `<li><span class="tag error">${k}</span> ${v}</li>`
+        `<li><a href="#error-${v.split('.')[0]}" class="tag error">${k}</a> ${v}</li>`
       ).join("")}
     </ul>
   `;
+}
+
+function renderErrors(errorFiles, usageMap) {
+  return errorFiles.map(file =>
+    Object.entries(file.content).map(([errorName, errors]) => `
+    <section id="error-${errorName}" class="card">
+      <h2>Error: ${errorName} (${file.name})</h2>
+      <ul>
+      ${Object.entries(errors).map(([key, value]) => `
+        <li><span class="tag error">${key}</span> ${value} </li>
+      `).join('')}
+      </ul>
+
+      <h3>Used by Rules</h3>
+      <ul>
+        ${Object.entries(errors).map(([key, value]) => `
+          ${(usageMap[`${errorName}.${key}`] || []).map(u =>
+            `<li>${u.file} → <strong>${u.field}</strong> (${u.error})</li>`
+          ).join("") || "<li>Not used</li>"}
+        `).join('')}
+      </ul>
+    </section>
+  `).join('')).join('');
 }
 
 /* ---------------------------------------
@@ -312,6 +376,7 @@ function generateCSS() {
     display: inline-block;
     margin-bottom: 8px;
     background: rgba(239,68,68,0.2);
+    text-decoration: none;
   }
 
   .tag.modifier {
