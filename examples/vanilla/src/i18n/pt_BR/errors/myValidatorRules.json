@@ -9,6 +9,9 @@
     "phone": {
         "regex": "Por favor, adicione um telefone válido"
     },
+    "cpf": {
+        "cpf": "Por favor, adicione um CPF válido"
+    },
     "name": {
         "nameSpecialValidation": "Por favor, preencha os seguintes campos: nome, email e telefone"
     }

@@ -14,6 +14,9 @@
         "validDate": "Please, fill the field with a existent date",
         "validateAge": "Invalid age, under 18"
     },
+    "cpf": {
+        "cpf": "Plase, fill the field with a valid CPF"
+    },
     "name": {
         "nameSpecialValidation": "Please, fill the field following fields: name, email and cellphone"
     }
