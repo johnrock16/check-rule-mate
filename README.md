@@ -13,6 +13,7 @@ It is designed for scenarios where traditional schema-based validators start to 
 - Async checks
 - Reusable validation logic across multiple forms
 - Full control over execution flow and error handling
+- Lifecycle Hooks
 
 
 **Github repository:** [check-rule-mate repository](https://github.com/johnrock16/check-rule-mate)
@@ -66,6 +67,7 @@ This separation makes the system flexible, scalable, and easy to maintain.
   - [Running Tests](#Repository---Running-Tests)
 - [How It Works](#How-It-Works)
   - [Basic Usage](#Basic-Usage)
+  - [Lifecycle Hooks](#Lifecycle-Hooks)
   - [Auto documentation](#Auto-Documentation)
 - [Defining Validation](#Defining-Validation)
   - [1. Schema](#Defining-a-Schema-What-to-validate)
@@ -167,14 +169,129 @@ When is **invalid** and **has errors**:
 }
 ```
 
+### Lifecycle Hooks
+The **check-rule-mate** lifecycle hooks allow you to observe, extend and react to the validation process without coupling logic to rules or helpers.
+
+Hooks are especially useful for:
+
+- Logging and debugging
+- Analytics and metrics
+- Custom side-effects
+- Integrating validation with UI or external systems
+- Advanced error handling and reporting
+- They provide fine-grained control over the validation lifecycle.
+
+```typescript
+hooks?: {
+  onValidateStart?: (payload) => void;
+  onValidateFieldStart?: (payload) => void;
+  onValidateFieldError?: (payload) => void;
+  onValidateFieldSuccess?: (payload) => void;
+  onValidateEnd?: (payload) => void;
+}
+```
+
+#### Hook Payloads
+
+##### `onValidateStart`
+Triggered once before validation begins.
+```typescript
+onValidateStart: ({ data }) => void
+```
+
+**Payload:**
+- `data`: Full form data object being validated
+
+##### `onValidateFieldStart`
+Triggered before validating each field.
+```typescript
+onValidateFieldStart: ({ field, value, schemaField }) => void
+```
+
+**Payload:**
+- `field`: Field name
+- `value`: Field value
+- `schemaField`: Schema configuration for the field (or `null` if missing)
+
+##### `onValidateFieldError`
+Triggered when a field fails validation.
+```typescript
+onValidateFieldError: ({ field, value, schemaField, error }) => void
+```
+
+**Payload:**
+- `field`: Field name
+- `value`: Field value
+- `schemaField`: Schema configuration for the field (or `null` if missing)
+- `error`: Validation error object
+
+##### `onValidateFieldSuccess`
+Triggered when a field is successfully validated.
+```typescript
+onValidateFieldSuccess: ({ field, value, schemaField }) => void
+```
+
+**Payload:**
+- `field`: Field name
+- `value`: Field value
+- `schemaField`: Schema configuration for the field (or `null` if missing)
+
+##### `onValidateEnd`
+Triggered once after validation finishes.
+```typescript
+onValidateEnd: ({ data, errors }) => void
+```
+
+**Payload:**
+- `data`: Full form data object being validated
+- `errors`: Validation errors (if any)
+If no errors occurred, `errors` may be `undefined`.
+
+#### Hooks -  Example Usage
+```javascript
+const validator = createValidator(fields, {
+  validationHelpers: myValidator,
+  rules: MY_RULES,
+  schema: CONTACT_US,
+  errorMessages: ERROR_MESSAGES,
+  hooks: {
+    onValidateStart: ({ data }) => {
+      console.log('Validation started', data);
+    },
+
+    onValidateFieldStart: ({ field, value }) => {
+      console.log(`Validating ${field}`, value);
+    },
+
+    onValidateFieldError: ({ field, error }) => {
+      console.error(`Error on ${field}`, error);
+    },
+
+    onValidateFieldSuccess: ({ field }) => {
+      console.log(`${field} validated successfully`);
+    },
+
+    onValidateEnd: ({ data, errors }) => {
+      if (errors) {
+        console.log('Validation finished with errors', errors);
+      } else {
+        console.log('Validation finished successfully');
+      }
+    }
+  }
+});
+
+await validator.validate();
+```
+
 ### Auto Documentation
 
-check-rule-mate contains a script to generate documentation based in your rules, schemas and error messages.
+**check-rule-mate** contains a script to generate **automatic documentation** based in your rules, schemas and error messages.
 
 To use that it is simple, you only need to run this command:
 
 ```bash
-npx generate-docs --rules rules-path --schemas schemas-path --errors errors-path --out file.html
+npx check-rule-mate-auto-docs --rules rules-path --schemas schemas-path --errors errors-path --out file.html
 ```
 
 This will generate a HTML file containing the rules, schemas and errors.

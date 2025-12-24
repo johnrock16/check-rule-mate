@@ -86,6 +86,9 @@ export interface DataValidatorConfigs {
 
   /** Validator options */
   options: ValidatorOptions
+
+  /** Validator hooks */
+  hooks: ValidatorHooks
 }
 
 /**
@@ -100,8 +103,11 @@ export interface DataValidatorSuccessResponse {
  * Error object.
  */
 export interface CheckError {
-  /** Field name */
+  /** Error name */
   name: string
+
+  /** Field name */
+  field?: string
 
   /** Error path */
   code?: string
@@ -111,6 +117,9 @@ export interface CheckError {
 
   /** Error message */
   message?: string
+
+  /** Internal error flag */
+  internal?: boolean
 }
 
 /**
@@ -124,5 +133,96 @@ export interface DataValidatorErrorResponse {
   errorMessage?: string
 
   /** Additional error details */
+  errors?: Record<string, CheckError>
+}
+
+export interface ValidatorHooks {
+  /** Executed before validation runs */
+  onValidateStart?: onValidateStart
+
+  /** Executed before validation runs for each field */
+  onValidateFieldStart?: onValidateFieldStart
+
+  /** Executed when validation fails for some field */
+  onValidateFieldError?: onValidateFieldError
+
+  /** Executed when validation has success for some field */
+  onValidateFieldSuccess?: onValidateFieldSuccess
+
+  /** Executed after validation runs */
+  onValidateEnd?: onValidateEnd
+}
+
+export interface onValidateStart {
+  /** Returns the payload of hook */
+  payload: onValidateStartPayload
+}
+
+export interface onValidateFieldStart {
+  /** Returns the payload of hook */
+  payload: onValidateFieldStartPayload
+}
+
+export interface onValidateFieldError {
+  /** Returns the payload of hook */
+  payload: onValidateFieldErrorPayload
+}
+
+export interface onValidateFieldSuccess {
+  /** Returns the payload of hook */
+  payload: onValidateFieldSuccessPayload
+}
+
+export interface onValidateEnd {
+  /** Returns the payload of hook */
+  payload: onValidateEndPayload
+}
+
+export interface onValidateStartPayload {
+  /** Form data object */
+  data: Object
+}
+
+export interface onValidateFieldStart {
+  /** Field name */
+  field: string
+
+  /** Field value */
+  value: any
+
+  /** Schema field */
+  schemaField: SchemaRuleField
+}
+
+export interface onValidateFieldError {
+  /** Field name */
+  field: string
+
+  /** Field value */
+  value: any
+
+  /** Schema field */
+  schemaField: SchemaRuleField
+
+  /** Field error */
+  error: CheckError
+}
+
+export interface onValidateFieldSuccess {
+  /** Field name */
+  field: string
+
+  /** Field value */
+  value: any
+
+  /** Schema field */
+  schemaField: SchemaRuleField
+}
+
+export interface onValidateEndPayload {
+  /** Form data object */
+  data: Object
+
+  /** Form errors  */
   errors?: Record<string, CheckError>
 }
