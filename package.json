@@ -1,6 +1,6 @@
 {
   "name": "check-rule-mate",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "",
   "main": "./dist/main.cjs.js",
   "type": "commonjs",
@@ -19,6 +19,7 @@
   ],
   "bin": {
     "check-rule-mate-auto-docs": "./bin/generate-docs.js",
+    "check-rule-mate-auto-docs-playground-experimental": "./bin/generate-docs-playground-experimental.js",
     "check-rule-mate-verify-templates": "./bin/verify-templates.js"
   },
   "scripts": {
@@ -30,6 +31,9 @@
   },
   "author": "João Rocha",
   "license": "ISC",
+  "optionalDependencies": {
+    "esbuild": "^0.27.2"
+  },
   "devDependencies": {
     "esbuild": "^0.27.2",
     "express": "^4.21.2",

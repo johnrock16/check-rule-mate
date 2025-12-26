@@ -1,0 +1,6 @@
+{
+    "validators": {
+        "myValidator": "./examples/vanilla/src/check-rule-mate-rules/validators/validators.js",
+        "nameValidator": "./examples/vanilla/src/check-rule-mate-rules/validators/validators.js"
+    }
+}

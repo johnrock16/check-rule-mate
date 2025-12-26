@@ -70,6 +70,7 @@ This separation makes the system flexible, scalable, and easy to maintain.
   - [Basic Usage](#Basic-Usage)
   - [Lifecycle Hooks](#Lifecycle-Hooks)
   - [Auto documentation](#Auto-Documentation)
+  - [[Experimental] - Documentation Playground](#experimental-documentation-playground)
   - [Auto Checker for Templates](#Auto-Checker-for-Templates)
 - [Defining Validation](#Defining-Validation)
   - [1. Schema](#Defining-a-Schema-What-to-validate)
@@ -293,10 +294,70 @@ await validator.validate();
 To use that it is simple, you only need to run this command:
 
 ```bash
-npx check-rule-mate-auto-docs --rules {rules path} --schemas {schemas path} --errors {errors path} --out file.html
+npx check-rule-mate-auto-docs --rules {rules path} --schemas {schemas path} --errors {errors path} --out {file.html}
 ```
 
 This will generate a HTML file containing the rules, schemas and errors.
+
+### [Experimental] Documentation Playground
+
+> ⚠️ The playground executes bundled client-side JavaScript.
+> Do not use untrusted validation code.
+
+The **Docs Playground** allows you to generate an interactive HTML page where you can **test your schemas, rules, and validators directly in the browser**.
+
+This feature is **experimental** and intended mainly for development and exploration purposes. It bundles your validation logic into a client-side format, enabling real-time validation without any backend setup.
+
+> ⚠️ Since this feature is experimental, APIs and behavior may change.
+
+---
+
+#### Requirements
+
+The playground generator depends on **optional dependencies** that are **not installed by default**.
+
+Before using it, make sure you have the required optional dependencies installed:
+
+```bash
+npm install esbuild
+```
+
+#### Usage
+
+Run the playground generator using the CLI:
+```bash
+npx check-rule-mate-auto-docs-playground-experimental \
+  --rules {rules-path} \
+  --schemas {schemas-path} \
+  --errors {errors-path} \
+  --options {options-path} \
+  --out {output-file.html}
+```
+
+This command will generate a self-contained HTML file with:
+- Documentation for your rules and schemas
+- A playground to test validation behavior in real time
+
+#### Options File
+
+The playground requires an **options file** to map validator names to their source files.
+
+Example:
+```json
+{
+  "validators": {
+    "myValidator": "./examples/vanilla/src/check-rule-mate-rules/validators/validators.js",
+    "nameValidator": "./examples/vanilla/src/check-rule-mate-rules/validators/validators.js",
+    "myValidator2": "./examples/vanilla/src/check-rule-mate-rules/validators/validator2.js"
+  }
+}
+```
+**How it works**:
+- **Keys** represent the **exported object/function/class** name of your **validator**
+- **Values** are paths to the **files** where those validators are defined
+- These validators are bundled and made available inside the playground
+
+This explicit mapping ensures predictable builds and avoids magic imports.
 
 ### Auto Checker for Templates
 You can **auto check** if your template it is working properly with all necessary properties or have something missing.
