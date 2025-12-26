@@ -265,17 +265,31 @@ function renderSchemas(schemas) {
             `}).join("")}
             <div style="display: flex; flex-direction: column;">
               <label for="check-rule-mate-validators">VALIDATORS</label>
-              <input name="check-rule-mate-validators" placeholder="Add the validator object/function/class name - example: myValidator" required/>
+              <select name="check-rule-mate-validators" required>
+                ${
+                  OPTIONS?.validators ? Object.keys(OPTIONS.validators).map((key) => `
+                    <option value=${key}>${key}</option>
+                  `)
+                  : ''
+                }
+              </select>
             </div>
             <div style="display: flex; flex-direction: column;">
               <label for="check-rule-mate-rules">RULES</label>
-              <input name="check-rule-mate-rules" placeholder="Add the rule file name - example: myRules" required/>
+              <select name="check-rule-mate-rules" required>
+                ${
+                  rulesFiles ? rulesFiles.map((rulesFile) => `
+                    <option value=${rulesFile.name}>${rulesFile.name}</option>
+                  `)
+                  : ''
+                }
+              </select>
             </div>
             <button type="submit">Validate Schema</button>
           </form>
           <div class="schema-test-result">
             <span>Result:</span>
-            <textarea id="textarea-schema-${schema.name}"></textarea>
+            <textarea id="textarea-schema-${schema.name}" readonly></textarea>
           </div>
         </div>
       </details>
@@ -554,7 +568,8 @@ function generateCSS() {
     color: #e5e7eb;
   }
 
-  .schema-test input {
+  .schema-test input,
+  .schema-test select {
     min-height: 28px;
     padding: 4px 8px 4px 8px;
     margin-bottom: 16px;
@@ -563,6 +578,11 @@ function generateCSS() {
     background-color: transparent;
     border: none;
     border-bottom: 1px solid white;
+  }
+
+  .schema-test select option {
+    background-color: #020617;
+    color: #e5e7eb;
   }
   `;
 }
@@ -591,7 +611,7 @@ function generateClientJS() {
       formElements.forEach((formElement) => {
         formElement.addEventListener('submit', async (e) => {
           e.preventDefault();
-          const inputElements = formElement.querySelectorAll('input');
+          const inputElements = formElement.querySelectorAll('input, select');
           const formName = formElement.dataset.form.split('--')[1];
           const formData = {};
           inputElements.forEach((inputElement) => {
