@@ -10,16 +10,25 @@
     "email": {
         "rule": "email",
         "required": true,
-        "cache": false
+        "cache": false,
+        "attributesHTML": {
+            "type": "email"
+        }
     },
     "emailConfirm": {
         "rule": "email--confirm",
         "required": true,
-        "cache": false
+        "cache": false,
+        "attributesHTML": {
+            "type": "email"
+        }
     },
     "phone": {
         "rule": "phone",
-        "required": false
+        "required": false,
+        "attributesHTML": {
+            "type": "tel"
+        }
     },
     "subject": {
         "rule": "hasText",

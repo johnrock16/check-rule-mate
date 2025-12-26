@@ -125,8 +125,74 @@
   .text-center {
     text-align: center;
   }
+
+  .schema-test {
+    margin-top: 32px;
+  }
+
+  .schema-test-container {
+    display: flex;
+    width: 100%;
+    margin: 32px 0 24px 0;
+    gap: 40px;
+  }
+
+  .schema-test-container > * {
+    width: 100%;
+  }
+
+  .schema-test-result span {
+    display: block;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .schema-test-result textarea {
+    width: 100%;
+    height: 80%;
+    color: #f4f4f4;
+    background-color: #111111;
+    border: none;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  form button[type="submit"] {
+    width: 100%;
+    padding: 16px 24px;
+    min-width: 120px;
+    min-height: 48px;
+    margin-top: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #444444;
+    background-color: #eede91;
+  }
+
+  label {
+    margin-bottom: 4px;
+    font-size: 16px;
+    color: #e5e7eb;
+  }
+
+  .schema-test input {
+    min-height: 28px;
+    padding: 4px 8px 4px 8px;
+    margin-bottom: 16px;
+    font-size: 16px;
+    color: #e5e7eb;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid white;
+  }
   
 </style>
+
+  <script src="./check-rule-mate.js" defer></script>
+  <script src="./index.js" defer></script>
 </head>
 <body>
 
@@ -170,6 +236,8 @@
       <a href="#error-phone">myValidatorRules - phone</a>
     
       <a href="#error-date">myValidatorRules - date</a>
+    
+      <a href="#error-cpf">myValidatorRules - cpf</a>
     
       <a href="#error-name">myValidatorRules - name</a>
     
@@ -277,7 +345,65 @@
         
       </tbody>
     </table>
-  </section>
+    
+      <details class="schema-test">
+        <summary>Schema Test (Experimental)</summary>
+        <div class="schema-test-container">
+          <form id="schema:contactUs" data-form="schema--contactUs">
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="name">name (name)</label>
+                <input name="name" required null/>
+              </div>
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="lastName">lastName (name)</label>
+                <input name="lastName" required null/>
+              </div>
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="email">email (email)</label>
+                <input name="email" required type="email"/>
+              </div>
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="emailConfirm">emailConfirm (email--confirm)</label>
+                <input name="emailConfirm" required type="email"/>
+              </div>
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="phone">phone (phone)</label>
+                <input name="phone"  type="tel"/>
+              </div>
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="subject">subject (hasText)</label>
+                <input name="subject" required null/>
+              </div>
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="message">message (hasText)</label>
+                <input name="message" required null/>
+              </div>
+            
+            <div style="display: flex; flex-direction: column;">
+              <label for="check-rule-mate-validators">VALIDATORS</label>
+              <input name="check-rule-mate-validators" placeholder="Add the validator object/function/class name - example: myValidator" required/>
+            </div>
+            <div style="display: flex; flex-direction: column;">
+              <label for="check-rule-mate-rules">RULES</label>
+              <input name="check-rule-mate-rules" placeholder="Add the rule file name - example: myRules" required/>
+            </div>
+            <button type="submit">Validate Schema</button>
+          </form>
+          <div class="schema-test-result">
+            <span>Result:</span>
+            <textarea id="textarea-schema-contactUs"></textarea>
+          </div>
+        </div>
+      </details>
+    
+    </section>
   
   <section id="schema-customerCreation" class="card">
     <h2>Schema: customerCreation</h2>
@@ -361,7 +487,60 @@
         
       </tbody>
     </table>
-  </section>
+    
+      <details class="schema-test">
+        <summary>Schema Test (Experimental)</summary>
+        <div class="schema-test-container">
+          <form id="schema:customerCreation" data-form="schema--customerCreation">
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="name">name (name)</label>
+                <input name="name" required null/>
+              </div>
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="lastName">lastName (name)</label>
+                <input name="lastName"  null/>
+              </div>
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="birthdate">birthdate (date--age)</label>
+                <input name="birthdate" required null/>
+              </div>
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="cpf">cpf (cpf)</label>
+                <input name="cpf" required null/>
+              </div>
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="email">email (email)</label>
+                <input name="email" required null/>
+              </div>
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="phone">phone (phone)</label>
+                <input name="phone" required null/>
+              </div>
+            
+            <div style="display: flex; flex-direction: column;">
+              <label for="check-rule-mate-validators">VALIDATORS</label>
+              <input name="check-rule-mate-validators" placeholder="Add the validator object/function/class name - example: myValidator" required/>
+            </div>
+            <div style="display: flex; flex-direction: column;">
+              <label for="check-rule-mate-rules">RULES</label>
+              <input name="check-rule-mate-rules" placeholder="Add the rule file name - example: myRules" required/>
+            </div>
+            <button type="submit">Validate Schema</button>
+          </form>
+          <div class="schema-test-result">
+            <span>Result:</span>
+            <textarea id="textarea-schema-customerCreation"></textarea>
+          </div>
+        </div>
+      </details>
+    
+    </section>
   
   <section id="schema-myAccount" class="card">
     <h2>Schema: myAccount</h2>
@@ -456,7 +635,65 @@
         
       </tbody>
     </table>
-  </section>
+    
+      <details class="schema-test">
+        <summary>Schema Test (Experimental)</summary>
+        <div class="schema-test-container">
+          <form id="schema:myAccount" data-form="schema--myAccount">
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="name">name (name)</label>
+                <input name="name" required null/>
+              </div>
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="lastName">lastName (name)</label>
+                <input name="lastName"  null/>
+              </div>
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="birthdate">birthdate (date--age)</label>
+                <input name="birthdate" required null/>
+              </div>
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="cpf">cpf (cpf)</label>
+                <input name="cpf" required null/>
+              </div>
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="email">email (email)</label>
+                <input name="email" required null/>
+              </div>
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="emailConfirm">emailConfirm (email--confirm)</label>
+                <input name="emailConfirm" required null/>
+              </div>
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="phone">phone (phone)</label>
+                <input name="phone" required null/>
+              </div>
+            
+            <div style="display: flex; flex-direction: column;">
+              <label for="check-rule-mate-validators">VALIDATORS</label>
+              <input name="check-rule-mate-validators" placeholder="Add the validator object/function/class name - example: myValidator" required/>
+            </div>
+            <div style="display: flex; flex-direction: column;">
+              <label for="check-rule-mate-rules">RULES</label>
+              <input name="check-rule-mate-rules" placeholder="Add the rule file name - example: myRules" required/>
+            </div>
+            <button type="submit">Validate Schema</button>
+          </form>
+          <div class="schema-test-result">
+            <span>Result:</span>
+            <textarea id="textarea-schema-myAccount"></textarea>
+          </div>
+        </div>
+      </details>
+    
+    </section>
   
   <section id="schema-nameSpecialValidationRules" class="card">
     <h2>Schema: nameSpecialValidationRules</h2>
@@ -507,7 +744,45 @@
         
       </tbody>
     </table>
-  </section>
+    
+      <details class="schema-test">
+        <summary>Schema Test (Experimental)</summary>
+        <div class="schema-test-container">
+          <form id="schema:nameSpecialValidationRules" data-form="schema--nameSpecialValidationRules">
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="name">name (name)</label>
+                <input name="name" required null/>
+              </div>
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="cellphone">cellphone (phone)</label>
+                <input name="cellphone" required null/>
+              </div>
+            
+              <div style="display: flex; flex-direction: column;">
+                <label for="email">email (email)</label>
+                <input name="email" required null/>
+              </div>
+            
+            <div style="display: flex; flex-direction: column;">
+              <label for="check-rule-mate-validators">VALIDATORS</label>
+              <input name="check-rule-mate-validators" placeholder="Add the validator object/function/class name - example: myValidator" required/>
+            </div>
+            <div style="display: flex; flex-direction: column;">
+              <label for="check-rule-mate-rules">RULES</label>
+              <input name="check-rule-mate-rules" placeholder="Add the rule file name - example: myRules" required/>
+            </div>
+            <button type="submit">Validate Schema</button>
+          </form>
+          <div class="schema-test-result">
+            <span>Result:</span>
+            <textarea id="textarea-schema-nameSpecialValidationRules"></textarea>
+          </div>
+        </div>
+      </details>
+    
+    </section>
   
   
     <section id="rule-name" class="card">
@@ -867,6 +1142,22 @@
       </ul>
     </section>
   
+    <section id="error-cpf" class="card">
+      <h2>Error: cpf (myValidatorRules)</h2>
+      <ul>
+      
+        <li><span class="tag error">cpf</span> Plase, fill the field with a valid CPF </li>
+      
+      </ul>
+
+      <h3>Used by Rules</h3>
+      <ul>
+        
+          <li>myValidatorRules → <strong>cpf</strong> (cpf.cpf)</li>
+        
+      </ul>
+    </section>
+  
     <section id="error-name" class="card">
       <h2>Error: name (myValidatorRules)</h2>
       <ul>
@@ -896,6 +1187,38 @@
         : "none";
     });
   });
+
+  
+    setTimeout(() => {
+      const rulesFiles = [{"name":"myValidatorRules","content":{"name":{"validate":["hasText"],"error":{"hasText":"common.hasText"},"docs":{"description":"Used to validate names based if they have text or not.","notes":"You can add your special note here."}},"hasText":{"validate":["hasText"],"error":{"hasText":"common.hasText"},"docs":{"description":"Used to validate if a text field is not blank."}},"email":{"regex":"/^[a-z0-9.]+@[a-z0-9]+\\.[a-z]+(\\.[a-z]+)?$/i","validate":["regex"],"error":{"regex":"email.regex"},"modifier":{"confirm":{"validate":["regex","equals"],"params":{"equals":["$email"]},"error":{"regex":"email.regex","equals":"email.equals"},"docs":{"description":"Used to validate if email confirm fields are valid emails and matches with the primary email field."}}},"docs":{"description":"Used to validate email fields. Checking if hasText and if matches with a valid format for emails.","notes":"To use email confirm modifier use email--confirm"}},"phone":{"regex":"/^[0-9]{4}-[0-9]?[0-9]{4}$/","validate":["regex"],"error":{"regex":"phone.regex"},"docs":{"description":"Checks if phone number has a valid format.","notes":"Only works for Brazilian's phone numbers"}},"date":{"regex":"/^\\d{4}[/\\-](0?[1-9]|1[012])[/\\-](0?[1-9]|[12][0-9]|3[01])$/","validate":["regex","validDate"],"error":{"regex":"common.dateFormat","validDate":"date.validDate"},"modifier":{"age":{"validate":["regex","validateAge"],"params":{"validateAge":[18,130]},"error":{"regex":"common.dateFormat","validateAge":"date.validateAge"}}},"docs":{"description":"Used to validate a date format in date or string fields","notes":"Can validate someone age based on birthdate through the date--age modifier"}},"cpf":{"validate":["cpf"],"error":{"cpf":"cpf.cpf"},"docs":{"description":"Used to check if someone CPF is valid or not","notes":"CPF is a ID document which only works in Brazil"}}}},{"name":"nameSpecialValidationRules","content":{"name":{"validate":["nameSpecialValidation"],"params":{"nameSpecialValidation":["$email","$cellphone"]},"error":{"nameSpecialValidation":"name.nameSpecialValidation"}}}}]
+      const schemasFiles = [{"name":"contactUs","content":{"name":{"rule":"name","required":true},"lastName":{"rule":"name","required":true},"email":{"rule":"email","required":true,"cache":false,"attributesHTML":{"type":"email"}},"emailConfirm":{"rule":"email--confirm","required":true,"cache":false,"attributesHTML":{"type":"email"}},"phone":{"rule":"phone","required":false,"attributesHTML":{"type":"tel"}},"subject":{"rule":"hasText","required":true},"message":{"rule":"hasText","required":true}}},{"name":"customerCreation","content":{"name":{"rule":"name","required":true},"lastName":{"rule":"name","required":false},"birthdate":{"rule":"date--age","required":true},"cpf":{"rule":"cpf","required":true},"email":{"rule":"email","required":true},"phone":{"rule":"phone","required":true}}},{"name":"myAccount","content":{"name":{"rule":"name","required":true},"lastName":{"rule":"name","required":false},"birthdate":{"rule":"date--age","required":true},"cpf":{"rule":"cpf","required":true},"email":{"rule":"email","required":true},"emailConfirm":{"rule":"email--confirm","required":true},"phone":{"rule":"phone","required":true}}},{"name":"nameSpecialValidationRules","content":{"name":{"rule":"name","required":true},"cellphone":{"rule":"phone","required":true},"email":{"rule":"email","required":true}}}]
+
+      const formElements = document.querySelectorAll('form[data-form]');
+      formElements.forEach((formElement) => {
+        formElement.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const inputElements = formElement.querySelectorAll('input');
+          const formName = formElement.dataset.form.split('--')[1];
+          const formData = {};
+          inputElements.forEach((inputElement) => {
+            formData[inputElement.name] = inputElement.value;
+          })
+
+          const validatorHelper = window.validatorHelpers[formData["check-rule-mate-validators"]][formData["check-rule-mate-validators"]];
+
+          const rules = rulesFiles.filter((rulesFile) => rulesFile.name === formData["check-rule-mate-rules"])[0].content;
+          const schema = schemasFiles.filter((schemaFile) => schemaFile.name === formName)[0].content;
+
+          const validator = createValidator(formData, {validationHelpers: validatorHelper, rules: rules, schema: schema, options: { propertiesMustMatch: false, abortEarly: false, cache: true}});
+          const result = await validator.validate();
+          console.log(formName, result);
+
+          const textAreaElement = document.querySelector('#textarea-schema-'+formName);
+          textAreaElement.value = JSON.stringify(result);
+        });
+      });
+    }, 1000);
+  
   
 </script>
 
