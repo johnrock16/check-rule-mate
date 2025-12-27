@@ -6,6 +6,7 @@ jest.config.js
 build.js
 *.md
 *.git/
+.github/
 *.tgz
 node_modules/
 .gitignore
