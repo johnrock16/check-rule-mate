@@ -153,37 +153,35 @@ export interface ValidatorHooks {
   onValidateEnd?: onValidateEnd
 }
 
-export interface onValidateStart {
-  /** Returns the payload of hook */
+export type onValidateStart = (
   payload: onValidateStartPayload
-}
+) => void | Promise<void>
 
-export interface onValidateFieldStart {
-  /** Returns the payload of hook */
+export type onValidateFieldStart = (
   payload: onValidateFieldStartPayload
-}
+) => void | Promise<void>
 
-export interface onValidateFieldError {
-  /** Returns the payload of hook */
+export type onValidateFieldError = (
   payload: onValidateFieldErrorPayload
-}
+) => void | Promise<void>
 
-export interface onValidateFieldSuccess {
-  /** Returns the payload of hook */
+export type onValidateFieldSuccess = (
   payload: onValidateFieldSuccessPayload
-}
+) => void | Promise<void>
 
-export interface onValidateEnd {
-  /** Returns the payload of hook */
+export type onValidateEnd = (
   payload: onValidateEndPayload
-}
+) => void | Promise<void>
 
+/**
+ * Hook payloads
+ */
 export interface onValidateStartPayload {
   /** Form data object */
   data: Object
 }
 
-export interface onValidateFieldStart {
+export interface onValidateFieldStartPayload {
   /** Field name */
   field: string
 
@@ -194,7 +192,7 @@ export interface onValidateFieldStart {
   schemaField: SchemaRuleField
 }
 
-export interface onValidateFieldError {
+export interface onValidateFieldErrorPayload {
   /** Field name */
   field: string
 
@@ -208,7 +206,7 @@ export interface onValidateFieldError {
   error: CheckError
 }
 
-export interface onValidateFieldSuccess {
+export interface onValidateFieldSuccessPayload {
   /** Field name */
   field: string
 
@@ -225,4 +223,24 @@ export interface onValidateEndPayload {
 
   /** Form errors  */
   errors?: Record<string, CheckError>
+}
+
+export function createValidator(
+  data: Record<string, any>,
+  options: {
+    validationHelpers?: Record<string, any>
+    rules: Record<string, any>
+    schema: Record<string, any>
+    errorMessages?: Record<string, string>
+    hooks?: ValidatorHooks
+    options?: {
+      propertiesMustMatch?: boolean
+      abortEarly?: boolean
+      cache?: boolean
+    }
+  }
+): {
+  validate(): Promise<{ ok?: true; error?: true; errors?: any }>
+  validateField(field: string): Promise<any>
+  setData(data: Record<string, any>): void
 }
