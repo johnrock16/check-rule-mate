@@ -36,7 +36,7 @@ const generateDocsPlayground = function ({ rulesArg, schemasArg, errorsArg, opti
     fs.writeFileSync(`./check-rule-mate.validators.docs.js`, entryPointFile);
 
     esbuild.build({
-      entryPoints: ['./src/main.js'],
+      entryPoints: ['./node_modules/check-rule-mate/src/main.js'],
       bundle: true,
       outfile: `${OUTPUT_DIR}/check-rule-mate.js`,
       platform: 'browser',
