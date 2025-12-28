@@ -1,12 +1,7 @@
-#!/usr/bin/env node
-
-// import fs from 'fs';
-// import path from 'path';
-// import process from 'process';
-
 const fs = require('fs');
 const path = require('path');
 const process = require('process');
+const { parseArgs } = require('../utils/args.js');
 
 /**
  * ---------------------------
@@ -146,38 +141,15 @@ function findUnusedErrors({ rules, errors }) {
 
 /**
  * ---------------------------
- * CLI Argument Parsing
- * ---------------------------
- */
-
-function parseArgs() {
-  const args = process.argv.slice(2);
-  const options = {};
-
-  for (let i = 0; i < args.length; i++) {
-    if (args[i].startsWith('--')) {
-      const key = args[i].replace('--', '');
-      options[key] = args[i + 1];
-      i++;
-    }
-  }
-
-  return options;
-}
-
-/**
- * ---------------------------
  * Runner
  * ---------------------------
  */
 
-async function runVerify() {
+async function runVerify(args) {
   try {
-    const args = parseArgs();
-
     if (!args.schemas || !args.rules || !args.errors) {
       console.error(
-        'Usage: check-rule-mate-verify-templates --schemas <path> --rules <path> --errors <path>'
+        'Usage: check-rule-mate verify --schemas <path> --rules <path> --errors <path>'
       );
       process.exit(1);
     }
@@ -223,4 +195,8 @@ async function runVerify() {
   }
 }
 
-runVerify();
+module.exports = function verify(argv) {
+  const args = parseArgs(argv);
+
+  return runVerify(args);
+}

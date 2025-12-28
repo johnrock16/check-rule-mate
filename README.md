@@ -294,7 +294,7 @@ await validator.validate();
 To use that it is simple, you only need to run this command:
 
 ```bash
-npx check-rule-mate-auto-docs --rules {rules path} --schemas {schemas path} --errors {errors path} --out {file.html}
+npx check-rule-mate docs --rules {rules path} --schemas {schemas path} --errors {errors path} --out {file.html}
 ```
 
 This will generate a HTML file containing the rules, schemas and errors.
@@ -304,7 +304,7 @@ This will generate a HTML file containing the rules, schemas and errors.
 > ⚠️ The playground executes bundled client-side JavaScript.
 > Do not use untrusted validation code.
 
-The **Docs Playground** allows you to generate an interactive HTML page where you can **test your schemas, rules, and validators directly in the browser**.
+The **Documentation Playground** allows you to generate an interactive HTML page where you can **test your schemas, rules, and validators directly in the browser**.
 
 This feature is **experimental** and intended mainly for development and exploration purposes. It bundles your validation logic into a client-side format, enabling real-time validation without any backend setup.
 
@@ -326,7 +326,7 @@ npm install esbuild
 
 Run the playground generator using the CLI:
 ```bash
-npx check-rule-mate-auto-docs-playground-experimental \
+npx check-rule-mate docs:playground \
   --rules {rules-path} \
   --schemas {schemas-path} \
   --errors {errors-path} \
@@ -365,7 +365,7 @@ You can **auto check** if your template it is working properly with all necessar
 It is works with: `Schemas`, `Rules` and `Errors`
 
 ```bash
-npx check-rule-mate-verify-templates --rules {rules path} --schemas {schemas path} --errors {errors path}
+npx check-rule-mate verify --rules {rules path} --schemas {schemas path} --errors {errors path}
 ```
 
 If everything it is **working properly** this should be your message:

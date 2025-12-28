@@ -1,6 +1,6 @@
 {
   "name": "check-rule-mate",
-  "version": "0.5.8",
+  "version": "0.5.9",
   "description": "",
   "main": "./dist/main.cjs.js",
   "type": "commonjs",
@@ -18,9 +18,7 @@
     "check rule mate"
   ],
   "bin": {
-    "check-rule-mate-auto-docs": "./bin/generate-docs.js",
-    "check-rule-mate-auto-docs-playground-experimental": "./bin/generate-docs-playground-experimental.js",
-    "check-rule-mate-verify-templates": "./bin/verify-templates.js"
+    "check-rule-mate": "./bin/index.js"
   },
   "scripts": {
     "start": "node ./examples/vanilla/src/index.js",

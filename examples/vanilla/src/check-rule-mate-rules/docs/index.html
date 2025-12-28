@@ -1,1280 +1,1281 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<title>check-rule-mate — Documentation</title>
-<style>
-
-  body {
-    margin: 0;
-    font-family: Inter, system-ui, sans-serif;
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    background: #0f172a;
-    color: #e5e7eb;
-  }
-
-  .sidebar {
-    padding: 16px;
-    background: #020617;
-    overflow-y: auto;
-  }
-
-  .sidebar input {
-    width: 100%;
-    padding: 8px;
-    border-radius: 6px;
-    border: none;
-    margin-bottom: 16px;
-  }
-
-  .sidebar a {
-    display: block;
-    padding: 6px 10px;
-    color: #e5e7eb;
-    text-decoration: none;
-    border-radius: 6px;
-  }
-
-  .sidebar a:hover {
-    background: rgba(56,189,248,0.2);
-  }
-
-  a {
-    color: #e5e7eb;
-  }
-
-  main {
-    padding: 32px;
-    overflow-y: auto;
-  }
-
-  .card {
-    background: #020617;
-    border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 32px;
-    border: 1px solid rgba(255,255,255,0.05);
-  }
-
-  .flow {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  .flow-step {
-    padding: 10px 14px;
-    border-radius: 8px;
-    background: rgba(56,189,248,0.15);
-  }
-
-  .flow-arrow {
-    opacity: 0.5;
-  }
-
-  .success {
-    background: rgba(34,197,94,0.2);
-  }
-
-  .tag {
-    padding: 4px 8px;
-    border-radius: 999px;
-    font-size: 14px;
-  }
-
-  .tag.error {
-    display: inline-block;
-    margin-bottom: 8px;
-    background: rgba(239,68,68,0.2);
-    text-decoration: none;
-  }
-
-  .tag.modifier {
-    display: inline-block;
-    font-size: 16px;
-    margin-bottom: 8px;
-    font-weight: 600;
-    background: rgba(167,139,250,0.2);
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  td, th {
-    padding: 8px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-  }
-
-  th {
-    text-align: left;
-    border-bottom: 1px solid #f4f4f4;
-  }
-
-  .rule-notes {
-    padding: 16px;
-    color: black;
-    background: #f4f4f4;
-    border-radius: 12px;
-  }
-
-  .text-center {
-    text-align: center;
-  }
-
-  .schema-test {
-    margin-top: 32px;
-  }
-
-  .schema-test-container {
-    display: flex;
-    width: 100%;
-    margin: 32px 0 24px 0;
-    gap: 40px;
-  }
-
-  .schema-test-container > * {
-    width: 100%;
-  }
-
-  .schema-test-result span {
-    display: block;
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 16px;
-  }
-
-  .schema-test-result textarea {
-    width: 100%;
-    height: 80%;
-    color: #f4f4f4;
-    background-color: #111111;
-    border: none;
-  }
-
-  button {
-    cursor: pointer;
-  }
-
-  form button[type="submit"] {
-    width: 100%;
-    padding: 16px 24px;
-    min-width: 120px;
-    min-height: 48px;
-    margin-top: 16px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #444444;
-    background-color: #eede91;
-  }
-
-  label {
-    margin-bottom: 4px;
-    font-size: 16px;
-    color: #e5e7eb;
-  }
-
-  .schema-test input,
-  .schema-test select {
-    min-height: 28px;
-    padding: 4px 8px 4px 8px;
-    margin-bottom: 16px;
-    font-size: 16px;
-    color: #e5e7eb;
-    background-color: transparent;
-    border: none;
-    border-bottom: 1px solid white;
-  }
-
-  .schema-test select option {
-    background-color: #020617;
-    color: #e5e7eb;
-  }
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8" />
+  <title>check-rule-mate — Documentation</title>
+  <style>
   
-</style>
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      background: #0f172a;
+      color: #e5e7eb;
+    }
 
-  <script src="./check-rule-mate.js" defer></script>
-  <script src="./index.js" defer></script>
-</head>
-<body>
+    .sidebar {
+      padding: 16px;
+      background: #020617;
+      overflow-y: auto;
+    }
 
-<aside class="sidebar">
-  <input id="search" placeholder="Search..." />
+    .sidebar input {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: none;
+      margin-bottom: 16px;
+    }
 
-  <h3>Schemas</h3>
-  
-    <a href="#schema-contactUs">contactUs</a>
-  
-    <a href="#schema-customerCreation">customerCreation</a>
-  
-    <a href="#schema-myAccount">myAccount</a>
-  
-    <a href="#schema-nameSpecialValidationRules">nameSpecialValidationRules</a>
-  
+    .sidebar a {
+      display: block;
+      padding: 6px 10px;
+      color: #e5e7eb;
+      text-decoration: none;
+      border-radius: 6px;
+    }
 
-  <h3>Rules</h3>
+    .sidebar a:hover {
+      background: rgba(56,189,248,0.2);
+    }
+
+    a {
+      color: #e5e7eb;
+    }
+
+    main {
+      padding: 32px;
+      overflow-y: auto;
+    }
+
+    .card {
+      background: #020617;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 32px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .flow-step {
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: rgba(56,189,248,0.15);
+    }
+
+    .flow-arrow {
+      opacity: 0.5;
+    }
+
+    .success {
+      background: rgba(34,197,94,0.2);
+    }
+
+    .tag {
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 14px;
+    }
+
+    .tag.error {
+      display: inline-block;
+      margin-bottom: 8px;
+      background: rgba(239,68,68,0.2);
+      text-decoration: none;
+    }
+
+    .tag.modifier {
+      display: inline-block;
+      font-size: 16px;
+      margin-bottom: 8px;
+      font-weight: 600;
+      background: rgba(167,139,250,0.2);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    td, th {
+      padding: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    th {
+      text-align: left;
+      border-bottom: 1px solid #f4f4f4;
+    }
+
+    .rule-notes {
+      padding: 16px;
+      color: black;
+      background: #f4f4f4;
+      border-radius: 12px;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .schema-test {
+      margin-top: 32px;
+    }
+
+    .schema-test-container {
+      display: flex;
+      width: 100%;
+      margin: 32px 0 24px 0;
+      gap: 40px;
+    }
+
+    .schema-test-container > * {
+      width: 100%;
+    }
+
+    .schema-test-result span {
+      display: block;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .schema-test-result textarea {
+      width: 100%;
+      height: 80%;
+      color: #f4f4f4;
+      background-color: #111111;
+      border: none;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    form button[type="submit"] {
+      width: 100%;
+      padding: 16px 24px;
+      min-width: 120px;
+      min-height: 48px;
+      margin-top: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #444444;
+      background-color: #eede91;
+    }
+
+    label {
+      margin-bottom: 4px;
+      font-size: 16px;
+      color: #e5e7eb;
+    }
+
+    .schema-test input,
+    .schema-test select {
+      min-height: 28px;
+      padding: 4px 8px 4px 8px;
+      margin-bottom: 16px;
+      font-size: 16px;
+      color: #e5e7eb;
+      background-color: transparent;
+      border: none;
+      border-bottom: 1px solid white;
+    }
+
+    .schema-test select option {
+      background-color: #020617;
+      color: #e5e7eb;
+    }
+    
+  </style>
   
-      <a href="#rule-name">myValidatorRules - name</a>
+    <script src="./check-rule-mate.js" defer></script>
+    <script src="./index.js" defer></script>
+  </head>
+  <body>
+
+  <aside class="sidebar">
+    <input id="search" placeholder="Search..." />
+
+    <h3>Schemas</h3>
     
-      <a href="#rule-hasText">myValidatorRules - hasText</a>
+      <a href="#schema-contactUs">contactUs</a>
     
-      <a href="#rule-email">myValidatorRules - email</a>
+      <a href="#schema-customerCreation">customerCreation</a>
     
-      <a href="#rule-phone">myValidatorRules - phone</a>
+      <a href="#schema-myAccount">myAccount</a>
     
-      <a href="#rule-date">myValidatorRules - date</a>
-    
-      <a href="#rule-cpf">myValidatorRules - cpf</a>
-    
-      <a href="#rule-name">nameSpecialValidationRules - name</a>
+      <a href="#schema-nameSpecialValidationRules">nameSpecialValidationRules</a>
     
 
-  <h3>Errors</h3>
-  
-      <a href="#error-common">myValidatorRules - common</a>
+    <h3>Rules</h3>
     
-      <a href="#error-email">myValidatorRules - email</a>
-    
-      <a href="#error-phone">myValidatorRules - phone</a>
-    
-      <a href="#error-date">myValidatorRules - date</a>
-    
-      <a href="#error-cpf">myValidatorRules - cpf</a>
-    
-      <a href="#error-name">myValidatorRules - name</a>
-    
-</aside>
+        <a href="#rule-name">myValidatorRules - name</a>
+      
+        <a href="#rule-hasText">myValidatorRules - hasText</a>
+      
+        <a href="#rule-email">myValidatorRules - email</a>
+      
+        <a href="#rule-phone">myValidatorRules - phone</a>
+      
+        <a href="#rule-date">myValidatorRules - date</a>
+      
+        <a href="#rule-cpf">myValidatorRules - cpf</a>
+      
+        <a href="#rule-name">nameSpecialValidationRules - name</a>
+      
 
-<main>
-  <section>
-    <h1>check-rule-mate</h1>
-    <p class="muted">
-      Visual documentation of validation rules and schemas.
-    </p>
-  </section>
+    <h3>Errors</h3>
+    
+        <a href="#error-common">myValidatorRules - common</a>
+      
+        <a href="#error-email">myValidatorRules - email</a>
+      
+        <a href="#error-phone">myValidatorRules - phone</a>
+      
+        <a href="#error-date">myValidatorRules - date</a>
+      
+        <a href="#error-cpf">myValidatorRules - cpf</a>
+      
+        <a href="#error-name">myValidatorRules - name</a>
+      
+  </aside>
 
-  
-  <section id="schema-contactUs" class="card">
-    <h2>Schema: contactUs</h2>
+  <main>
+    <section>
+      <h1>check-rule-mate</h1>
+      <p class="muted">
+        Visual documentation of validation rules and schemas.
+      </p>
+    </section>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Field</th>
-          <th>Rule</th>
-          <th class="text-center">Required</th>
-          <th class="text-center">Cache</th>
-        </tr>
-      </thead>
-      <tbody>
-        
+    
+    <section id="schema-contactUs" class="card">
+      <h2>Schema: contactUs</h2>
+
+      <table>
+        <thead>
           <tr>
-            <td>name</td>
-            <td>
-              <a href="#rule-name">
-                name
-              </a>
-            </td>
-            <td class="text-center">✔</td>
-            <td class="text-center">✔</td>
+            <th>Field</th>
+            <th>Rule</th>
+            <th class="text-center">Required</th>
+            <th class="text-center">Cache</th>
           </tr>
-        
-          <tr>
-            <td>lastName</td>
-            <td>
-              <a href="#rule-name">
-                name
-              </a>
-            </td>
-            <td class="text-center">✔</td>
-            <td class="text-center">✔</td>
-          </tr>
-        
-          <tr>
-            <td>email</td>
-            <td>
-              <a href="#rule-email">
-                email
-              </a>
-            </td>
-            <td class="text-center">✔</td>
-            <td class="text-center">off</td>
-          </tr>
-        
-          <tr>
-            <td>emailConfirm</td>
-            <td>
-              <a href="#rule-email">
-                email--confirm
-              </a>
-            </td>
-            <td class="text-center">✔</td>
-            <td class="text-center">off</td>
-          </tr>
-        
-          <tr>
-            <td>phone</td>
-            <td>
-              <a href="#rule-phone">
-                phone
-              </a>
-            </td>
-            <td class="text-center">optional</td>
-            <td class="text-center">✔</td>
-          </tr>
-        
-          <tr>
-            <td>subject</td>
-            <td>
-              <a href="#rule-hasText">
-                hasText
-              </a>
-            </td>
-            <td class="text-center">✔</td>
-            <td class="text-center">✔</td>
-          </tr>
-        
-          <tr>
-            <td>message</td>
-            <td>
-              <a href="#rule-hasText">
-                hasText
-              </a>
-            </td>
-            <td class="text-center">✔</td>
-            <td class="text-center">✔</td>
-          </tr>
-        
-      </tbody>
-    </table>
-    
-      <details class="schema-test">
-        <summary>Schema Test (Experimental)</summary>
-        <div class="schema-test-container">
-          <form id="schema:contactUs" data-form="schema--contactUs">
-            
+        </thead>
+        <tbody>
+          
+            <tr>
+              <td>name</td>
+              <td>
+                <a href="#rule-name">
+                  name
+                </a>
+              </td>
+              <td class="text-center">✔</td>
+              <td class="text-center">✔</td>
+            </tr>
+          
+            <tr>
+              <td>lastName</td>
+              <td>
+                <a href="#rule-name">
+                  name
+                </a>
+              </td>
+              <td class="text-center">✔</td>
+              <td class="text-center">✔</td>
+            </tr>
+          
+            <tr>
+              <td>email</td>
+              <td>
+                <a href="#rule-email">
+                  email
+                </a>
+              </td>
+              <td class="text-center">✔</td>
+              <td class="text-center">off</td>
+            </tr>
+          
+            <tr>
+              <td>emailConfirm</td>
+              <td>
+                <a href="#rule-email">
+                  email--confirm
+                </a>
+              </td>
+              <td class="text-center">✔</td>
+              <td class="text-center">off</td>
+            </tr>
+          
+            <tr>
+              <td>phone</td>
+              <td>
+                <a href="#rule-phone">
+                  phone
+                </a>
+              </td>
+              <td class="text-center">optional</td>
+              <td class="text-center">✔</td>
+            </tr>
+          
+            <tr>
+              <td>subject</td>
+              <td>
+                <a href="#rule-hasText">
+                  hasText
+                </a>
+              </td>
+              <td class="text-center">✔</td>
+              <td class="text-center">✔</td>
+            </tr>
+          
+            <tr>
+              <td>message</td>
+              <td>
+                <a href="#rule-hasText">
+                  hasText
+                </a>
+              </td>
+              <td class="text-center">✔</td>
+              <td class="text-center">✔</td>
+            </tr>
+          
+        </tbody>
+      </table>
+      
+        <details class="schema-test">
+          <summary>Schema Test (Experimental)</summary>
+          <div class="schema-test-container">
+            <form id="schema:contactUs" data-form="schema--contactUs">
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="name">name (name)</label>
+                  <input name="name" required null/>
+                </div>
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="lastName">lastName (name)</label>
+                  <input name="lastName" required null/>
+                </div>
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="email">email (email)</label>
+                  <input name="email" required type="email"/>
+                </div>
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="emailConfirm">emailConfirm (email--confirm)</label>
+                  <input name="emailConfirm" required type="email"/>
+                </div>
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="phone">phone (phone)</label>
+                  <input name="phone"  type="tel"/>
+                </div>
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="subject">subject (hasText)</label>
+                  <input name="subject" required null/>
+                </div>
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="message">message (hasText)</label>
+                  <input name="message" required null/>
+                </div>
+              
               <div style="display: flex; flex-direction: column;">
-                <label for="name">name (name)</label>
-                <input name="name" required null/>
-              </div>
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="lastName">lastName (name)</label>
-                <input name="lastName" required null/>
-              </div>
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="email">email (email)</label>
-                <input name="email" required type="email"/>
-              </div>
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="emailConfirm">emailConfirm (email--confirm)</label>
-                <input name="emailConfirm" required type="email"/>
-              </div>
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="phone">phone (phone)</label>
-                <input name="phone"  type="tel"/>
-              </div>
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="subject">subject (hasText)</label>
-                <input name="subject" required null/>
-              </div>
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="message">message (hasText)</label>
-                <input name="message" required null/>
-              </div>
-            
-            <div style="display: flex; flex-direction: column;">
-              <label for="check-rule-mate-validators">VALIDATORS</label>
-              <select name="check-rule-mate-validators" required>
-                
-                    <option value=myValidator>myValidator</option>
-                  ,
-                    <option value=nameValidator>nameValidator</option>
+                <label for="check-rule-mate-validators">VALIDATORS</label>
+                <select name="check-rule-mate-validators" required>
                   
-              </select>
-            </div>
-            <div style="display: flex; flex-direction: column;">
-              <label for="check-rule-mate-rules">RULES</label>
-              <select name="check-rule-mate-rules" required>
-                
-                    <option value=myValidatorRules>myValidatorRules</option>
-                  ,
-                    <option value=nameSpecialValidationRules>nameSpecialValidationRules</option>
+                      <option value=myValidator>myValidator</option>
+                    ,
+                      <option value=nameValidator>nameValidator</option>
+                    
+                </select>
+              </div>
+              <div style="display: flex; flex-direction: column;">
+                <label for="check-rule-mate-rules">RULES</label>
+                <select name="check-rule-mate-rules" required>
                   
-              </select>
+                      <option value=myValidatorRules>myValidatorRules</option>
+                    ,
+                      <option value=nameSpecialValidationRules>nameSpecialValidationRules</option>
+                    
+                </select>
+              </div>
+              <button type="submit">Validate Schema</button>
+            </form>
+            <div class="schema-test-result">
+              <span>Result:</span>
+              <textarea id="textarea-schema-contactUs" readonly></textarea>
             </div>
-            <button type="submit">Validate Schema</button>
-          </form>
-          <div class="schema-test-result">
-            <span>Result:</span>
-            <textarea id="textarea-schema-contactUs"></textarea>
           </div>
+        </details>
+      
+      </section>
+    
+    <section id="schema-customerCreation" class="card">
+      <h2>Schema: customerCreation</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>Rule</th>
+            <th class="text-center">Required</th>
+            <th class="text-center">Cache</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+              <td>name</td>
+              <td>
+                <a href="#rule-name">
+                  name
+                </a>
+              </td>
+              <td class="text-center">✔</td>
+              <td class="text-center">✔</td>
+            </tr>
+          
+            <tr>
+              <td>lastName</td>
+              <td>
+                <a href="#rule-name">
+                  name
+                </a>
+              </td>
+              <td class="text-center">optional</td>
+              <td class="text-center">✔</td>
+            </tr>
+          
+            <tr>
+              <td>birthdate</td>
+              <td>
+                <a href="#rule-date">
+                  date--age
+                </a>
+              </td>
+              <td class="text-center">✔</td>
+              <td class="text-center">✔</td>
+            </tr>
+          
+            <tr>
+              <td>cpf</td>
+              <td>
+                <a href="#rule-cpf">
+                  cpf
+                </a>
+              </td>
+              <td class="text-center">✔</td>
+              <td class="text-center">✔</td>
+            </tr>
+          
+            <tr>
+              <td>email</td>
+              <td>
+                <a href="#rule-email">
+                  email
+                </a>
+              </td>
+              <td class="text-center">✔</td>
+              <td class="text-center">✔</td>
+            </tr>
+          
+            <tr>
+              <td>phone</td>
+              <td>
+                <a href="#rule-phone">
+                  phone
+                </a>
+              </td>
+              <td class="text-center">✔</td>
+              <td class="text-center">✔</td>
+            </tr>
+          
+        </tbody>
+      </table>
+      
+        <details class="schema-test">
+          <summary>Schema Test (Experimental)</summary>
+          <div class="schema-test-container">
+            <form id="schema:customerCreation" data-form="schema--customerCreation">
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="name">name (name)</label>
+                  <input name="name" required null/>
+                </div>
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="lastName">lastName (name)</label>
+                  <input name="lastName"  null/>
+                </div>
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="birthdate">birthdate (date--age)</label>
+                  <input name="birthdate" required null/>
+                </div>
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="cpf">cpf (cpf)</label>
+                  <input name="cpf" required null/>
+                </div>
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="email">email (email)</label>
+                  <input name="email" required null/>
+                </div>
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="phone">phone (phone)</label>
+                  <input name="phone" required null/>
+                </div>
+              
+              <div style="display: flex; flex-direction: column;">
+                <label for="check-rule-mate-validators">VALIDATORS</label>
+                <select name="check-rule-mate-validators" required>
+                  
+                      <option value=myValidator>myValidator</option>
+                    ,
+                      <option value=nameValidator>nameValidator</option>
+                    
+                </select>
+              </div>
+              <div style="display: flex; flex-direction: column;">
+                <label for="check-rule-mate-rules">RULES</label>
+                <select name="check-rule-mate-rules" required>
+                  
+                      <option value=myValidatorRules>myValidatorRules</option>
+                    ,
+                      <option value=nameSpecialValidationRules>nameSpecialValidationRules</option>
+                    
+                </select>
+              </div>
+              <button type="submit">Validate Schema</button>
+            </form>
+            <div class="schema-test-result">
+              <span>Result:</span>
+              <textarea id="textarea-schema-customerCreation" readonly></textarea>
+            </div>
+          </div>
+        </details>
+      
+      </section>
+    
+    <section id="schema-myAccount" class="card">
+      <h2>Schema: myAccount</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>Rule</th>
+            <th class="text-center">Required</th>
+            <th class="text-center">Cache</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+              <td>name</td>
+              <td>
+                <a href="#rule-name">
+                  name
+                </a>
+              </td>
+              <td class="text-center">✔</td>
+              <td class="text-center">✔</td>
+            </tr>
+          
+            <tr>
+              <td>lastName</td>
+              <td>
+                <a href="#rule-name">
+                  name
+                </a>
+              </td>
+              <td class="text-center">optional</td>
+              <td class="text-center">✔</td>
+            </tr>
+          
+            <tr>
+              <td>birthdate</td>
+              <td>
+                <a href="#rule-date">
+                  date--age
+                </a>
+              </td>
+              <td class="text-center">✔</td>
+              <td class="text-center">✔</td>
+            </tr>
+          
+            <tr>
+              <td>cpf</td>
+              <td>
+                <a href="#rule-cpf">
+                  cpf
+                </a>
+              </td>
+              <td class="text-center">✔</td>
+              <td class="text-center">✔</td>
+            </tr>
+          
+            <tr>
+              <td>email</td>
+              <td>
+                <a href="#rule-email">
+                  email
+                </a>
+              </td>
+              <td class="text-center">✔</td>
+              <td class="text-center">✔</td>
+            </tr>
+          
+            <tr>
+              <td>emailConfirm</td>
+              <td>
+                <a href="#rule-email">
+                  email--confirm
+                </a>
+              </td>
+              <td class="text-center">✔</td>
+              <td class="text-center">✔</td>
+            </tr>
+          
+            <tr>
+              <td>phone</td>
+              <td>
+                <a href="#rule-phone">
+                  phone
+                </a>
+              </td>
+              <td class="text-center">✔</td>
+              <td class="text-center">✔</td>
+            </tr>
+          
+        </tbody>
+      </table>
+      
+        <details class="schema-test">
+          <summary>Schema Test (Experimental)</summary>
+          <div class="schema-test-container">
+            <form id="schema:myAccount" data-form="schema--myAccount">
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="name">name (name)</label>
+                  <input name="name" required null/>
+                </div>
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="lastName">lastName (name)</label>
+                  <input name="lastName"  null/>
+                </div>
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="birthdate">birthdate (date--age)</label>
+                  <input name="birthdate" required null/>
+                </div>
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="cpf">cpf (cpf)</label>
+                  <input name="cpf" required null/>
+                </div>
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="email">email (email)</label>
+                  <input name="email" required null/>
+                </div>
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="emailConfirm">emailConfirm (email--confirm)</label>
+                  <input name="emailConfirm" required null/>
+                </div>
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="phone">phone (phone)</label>
+                  <input name="phone" required null/>
+                </div>
+              
+              <div style="display: flex; flex-direction: column;">
+                <label for="check-rule-mate-validators">VALIDATORS</label>
+                <select name="check-rule-mate-validators" required>
+                  
+                      <option value=myValidator>myValidator</option>
+                    ,
+                      <option value=nameValidator>nameValidator</option>
+                    
+                </select>
+              </div>
+              <div style="display: flex; flex-direction: column;">
+                <label for="check-rule-mate-rules">RULES</label>
+                <select name="check-rule-mate-rules" required>
+                  
+                      <option value=myValidatorRules>myValidatorRules</option>
+                    ,
+                      <option value=nameSpecialValidationRules>nameSpecialValidationRules</option>
+                    
+                </select>
+              </div>
+              <button type="submit">Validate Schema</button>
+            </form>
+            <div class="schema-test-result">
+              <span>Result:</span>
+              <textarea id="textarea-schema-myAccount" readonly></textarea>
+            </div>
+          </div>
+        </details>
+      
+      </section>
+    
+    <section id="schema-nameSpecialValidationRules" class="card">
+      <h2>Schema: nameSpecialValidationRules</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>Rule</th>
+            <th class="text-center">Required</th>
+            <th class="text-center">Cache</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+              <td>name</td>
+              <td>
+                <a href="#rule-name">
+                  name
+                </a>
+              </td>
+              <td class="text-center">✔</td>
+              <td class="text-center">✔</td>
+            </tr>
+          
+            <tr>
+              <td>cellphone</td>
+              <td>
+                <a href="#rule-phone">
+                  phone
+                </a>
+              </td>
+              <td class="text-center">✔</td>
+              <td class="text-center">✔</td>
+            </tr>
+          
+            <tr>
+              <td>email</td>
+              <td>
+                <a href="#rule-email">
+                  email
+                </a>
+              </td>
+              <td class="text-center">✔</td>
+              <td class="text-center">✔</td>
+            </tr>
+          
+        </tbody>
+      </table>
+      
+        <details class="schema-test">
+          <summary>Schema Test (Experimental)</summary>
+          <div class="schema-test-container">
+            <form id="schema:nameSpecialValidationRules" data-form="schema--nameSpecialValidationRules">
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="name">name (name)</label>
+                  <input name="name" required null/>
+                </div>
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="cellphone">cellphone (phone)</label>
+                  <input name="cellphone" required null/>
+                </div>
+              
+                <div style="display: flex; flex-direction: column;">
+                  <label for="email">email (email)</label>
+                  <input name="email" required null/>
+                </div>
+              
+              <div style="display: flex; flex-direction: column;">
+                <label for="check-rule-mate-validators">VALIDATORS</label>
+                <select name="check-rule-mate-validators" required>
+                  
+                      <option value=myValidator>myValidator</option>
+                    ,
+                      <option value=nameValidator>nameValidator</option>
+                    
+                </select>
+              </div>
+              <div style="display: flex; flex-direction: column;">
+                <label for="check-rule-mate-rules">RULES</label>
+                <select name="check-rule-mate-rules" required>
+                  
+                      <option value=myValidatorRules>myValidatorRules</option>
+                    ,
+                      <option value=nameSpecialValidationRules>nameSpecialValidationRules</option>
+                    
+                </select>
+              </div>
+              <button type="submit">Validate Schema</button>
+            </form>
+            <div class="schema-test-result">
+              <span>Result:</span>
+              <textarea id="textarea-schema-nameSpecialValidationRules" readonly></textarea>
+            </div>
+          </div>
+        </details>
+      
+      </section>
+    
+    
+      <section id="rule-name" class="card">
+        <h2>Rule: name (myValidatorRules)</h2>
+        <p>Used to validate names based if they have text or not.</p>
+
+        <h3>Validation Flow</h3>
+        <div class="flow">
+          
+            <div class="flow-step">hasText</div>
+            <div class="flow-arrow">→</div>
+          
+          <div class="flow-step success">valid</div>
         </div>
-      </details>
-    
-    </section>
-  
-  <section id="schema-customerCreation" class="card">
-    <h2>Schema: customerCreation</h2>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Field</th>
-          <th>Rule</th>
-          <th class="text-center">Required</th>
-          <th class="text-center">Cache</th>
-        </tr>
-      </thead>
-      <tbody>
+        <h3>Error Codes</h3>
         
-          <tr>
-            <td>name</td>
-            <td>
-              <a href="#rule-name">
-                name
-              </a>
-            </td>
-            <td class="text-center">✔</td>
-            <td class="text-center">✔</td>
-          </tr>
-        
-          <tr>
-            <td>lastName</td>
-            <td>
-              <a href="#rule-name">
-                name
-              </a>
-            </td>
-            <td class="text-center">optional</td>
-            <td class="text-center">✔</td>
-          </tr>
-        
-          <tr>
-            <td>birthdate</td>
-            <td>
-              <a href="#rule-date">
-                date--age
-              </a>
-            </td>
-            <td class="text-center">✔</td>
-            <td class="text-center">✔</td>
-          </tr>
-        
-          <tr>
-            <td>cpf</td>
-            <td>
-              <a href="#rule-cpf">
-                cpf
-              </a>
-            </td>
-            <td class="text-center">✔</td>
-            <td class="text-center">✔</td>
-          </tr>
-        
-          <tr>
-            <td>email</td>
-            <td>
-              <a href="#rule-email">
-                email
-              </a>
-            </td>
-            <td class="text-center">✔</td>
-            <td class="text-center">✔</td>
-          </tr>
-        
-          <tr>
-            <td>phone</td>
-            <td>
-              <a href="#rule-phone">
-                phone
-              </a>
-            </td>
-            <td class="text-center">✔</td>
-            <td class="text-center">✔</td>
-          </tr>
-        
-      </tbody>
-    </table>
+      <ul>
+        <li><a href="#error-common" class="tag error">hasText</a> common.hasText</li>
+      </ul>
     
-      <details class="schema-test">
-        <summary>Schema Test (Experimental)</summary>
-        <div class="schema-test-container">
-          <form id="schema:customerCreation" data-form="schema--customerCreation">
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="name">name (name)</label>
-                <input name="name" required null/>
-              </div>
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="lastName">lastName (name)</label>
-                <input name="lastName"  null/>
-              </div>
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="birthdate">birthdate (date--age)</label>
-                <input name="birthdate" required null/>
-              </div>
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="cpf">cpf (cpf)</label>
-                <input name="cpf" required null/>
-              </div>
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="email">email (email)</label>
-                <input name="email" required null/>
-              </div>
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="phone">phone (phone)</label>
-                <input name="phone" required null/>
-              </div>
-            
-            <div style="display: flex; flex-direction: column;">
-              <label for="check-rule-mate-validators">VALIDATORS</label>
-              <select name="check-rule-mate-validators" required>
-                
-                    <option value=myValidator>myValidator</option>
-                  ,
-                    <option value=nameValidator>nameValidator</option>
-                  
-              </select>
-            </div>
-            <div style="display: flex; flex-direction: column;">
-              <label for="check-rule-mate-rules">RULES</label>
-              <select name="check-rule-mate-rules" required>
-                
-                    <option value=myValidatorRules>myValidatorRules</option>
-                  ,
-                    <option value=nameSpecialValidationRules>nameSpecialValidationRules</option>
-                  
-              </select>
-            </div>
-            <button type="submit">Validate Schema</button>
-          </form>
-          <div class="schema-test-result">
-            <span>Result:</span>
-            <textarea id="textarea-schema-customerCreation"></textarea>
-          </div>
+
+        
+
+        <h3>Used by Schemas</h3>
+        <ul>
+          <li>contactUs → <strong>name</strong> (name)</li><li>contactUs → <strong>lastName</strong> (name)</li><li>customerCreation → <strong>name</strong> (name)</li><li>customerCreation → <strong>lastName</strong> (name)</li><li>myAccount → <strong>name</strong> (name)</li><li>myAccount → <strong>lastName</strong> (name)</li><li>nameSpecialValidationRules → <strong>name</strong> (name)</li>
+        </ul>
+
+        
+          <h3>Notes</h3>
+          <div class="rule-notes">You can add your special note here.</div>
+        
+      </section>
+      
+      <section id="rule-hasText" class="card">
+        <h2>Rule: hasText (myValidatorRules)</h2>
+        <p>Used to validate if a text field is not blank.</p>
+
+        <h3>Validation Flow</h3>
+        <div class="flow">
+          
+            <div class="flow-step">hasText</div>
+            <div class="flow-arrow">→</div>
+          
+          <div class="flow-step success">valid</div>
         </div>
-      </details>
-    
-    </section>
-  
-  <section id="schema-myAccount" class="card">
-    <h2>Schema: myAccount</h2>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Field</th>
-          <th>Rule</th>
-          <th class="text-center">Required</th>
-          <th class="text-center">Cache</th>
-        </tr>
-      </thead>
-      <tbody>
+        <h3>Error Codes</h3>
         
-          <tr>
-            <td>name</td>
-            <td>
-              <a href="#rule-name">
-                name
-              </a>
-            </td>
-            <td class="text-center">✔</td>
-            <td class="text-center">✔</td>
-          </tr>
-        
-          <tr>
-            <td>lastName</td>
-            <td>
-              <a href="#rule-name">
-                name
-              </a>
-            </td>
-            <td class="text-center">optional</td>
-            <td class="text-center">✔</td>
-          </tr>
-        
-          <tr>
-            <td>birthdate</td>
-            <td>
-              <a href="#rule-date">
-                date--age
-              </a>
-            </td>
-            <td class="text-center">✔</td>
-            <td class="text-center">✔</td>
-          </tr>
-        
-          <tr>
-            <td>cpf</td>
-            <td>
-              <a href="#rule-cpf">
-                cpf
-              </a>
-            </td>
-            <td class="text-center">✔</td>
-            <td class="text-center">✔</td>
-          </tr>
-        
-          <tr>
-            <td>email</td>
-            <td>
-              <a href="#rule-email">
-                email
-              </a>
-            </td>
-            <td class="text-center">✔</td>
-            <td class="text-center">✔</td>
-          </tr>
-        
-          <tr>
-            <td>emailConfirm</td>
-            <td>
-              <a href="#rule-email">
-                email--confirm
-              </a>
-            </td>
-            <td class="text-center">✔</td>
-            <td class="text-center">✔</td>
-          </tr>
-        
-          <tr>
-            <td>phone</td>
-            <td>
-              <a href="#rule-phone">
-                phone
-              </a>
-            </td>
-            <td class="text-center">✔</td>
-            <td class="text-center">✔</td>
-          </tr>
-        
-      </tbody>
-    </table>
+      <ul>
+        <li><a href="#error-common" class="tag error">hasText</a> common.hasText</li>
+      </ul>
     
-      <details class="schema-test">
-        <summary>Schema Test (Experimental)</summary>
-        <div class="schema-test-container">
-          <form id="schema:myAccount" data-form="schema--myAccount">
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="name">name (name)</label>
-                <input name="name" required null/>
-              </div>
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="lastName">lastName (name)</label>
-                <input name="lastName"  null/>
-              </div>
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="birthdate">birthdate (date--age)</label>
-                <input name="birthdate" required null/>
-              </div>
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="cpf">cpf (cpf)</label>
-                <input name="cpf" required null/>
-              </div>
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="email">email (email)</label>
-                <input name="email" required null/>
-              </div>
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="emailConfirm">emailConfirm (email--confirm)</label>
-                <input name="emailConfirm" required null/>
-              </div>
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="phone">phone (phone)</label>
-                <input name="phone" required null/>
-              </div>
-            
-            <div style="display: flex; flex-direction: column;">
-              <label for="check-rule-mate-validators">VALIDATORS</label>
-              <select name="check-rule-mate-validators" required>
-                
-                    <option value=myValidator>myValidator</option>
-                  ,
-                    <option value=nameValidator>nameValidator</option>
-                  
-              </select>
-            </div>
-            <div style="display: flex; flex-direction: column;">
-              <label for="check-rule-mate-rules">RULES</label>
-              <select name="check-rule-mate-rules" required>
-                
-                    <option value=myValidatorRules>myValidatorRules</option>
-                  ,
-                    <option value=nameSpecialValidationRules>nameSpecialValidationRules</option>
-                  
-              </select>
-            </div>
-            <button type="submit">Validate Schema</button>
-          </form>
-          <div class="schema-test-result">
-            <span>Result:</span>
-            <textarea id="textarea-schema-myAccount"></textarea>
-          </div>
+
+        
+
+        <h3>Used by Schemas</h3>
+        <ul>
+          <li>contactUs → <strong>subject</strong> (hasText)</li><li>contactUs → <strong>message</strong> (hasText)</li>
+        </ul>
+
+        
+      </section>
+      
+      <section id="rule-email" class="card">
+        <h2>Rule: email (myValidatorRules)</h2>
+        <p>Used to validate email fields. Checking if hasText and if matches with a valid format for emails.</p>
+
+        <h3>Validation Flow</h3>
+        <div class="flow">
+          
+            <div class="flow-step">regex</div>
+            <div class="flow-arrow">→</div>
+          
+          <div class="flow-step success">valid</div>
         </div>
-      </details>
-    
-    </section>
-  
-  <section id="schema-nameSpecialValidationRules" class="card">
-    <h2>Schema: nameSpecialValidationRules</h2>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Field</th>
-          <th>Rule</th>
-          <th class="text-center">Required</th>
-          <th class="text-center">Cache</th>
-        </tr>
-      </thead>
-      <tbody>
+        <h3>Error Codes</h3>
         
-          <tr>
-            <td>name</td>
-            <td>
-              <a href="#rule-name">
-                name
-              </a>
-            </td>
-            <td class="text-center">✔</td>
-            <td class="text-center">✔</td>
-          </tr>
-        
-          <tr>
-            <td>cellphone</td>
-            <td>
-              <a href="#rule-phone">
-                phone
-              </a>
-            </td>
-            <td class="text-center">✔</td>
-            <td class="text-center">✔</td>
-          </tr>
-        
-          <tr>
-            <td>email</td>
-            <td>
-              <a href="#rule-email">
-                email
-              </a>
-            </td>
-            <td class="text-center">✔</td>
-            <td class="text-center">✔</td>
-          </tr>
-        
-      </tbody>
-    </table>
+      <ul>
+        <li><a href="#error-email" class="tag error">regex</a> email.regex</li>
+      </ul>
     
-      <details class="schema-test">
-        <summary>Schema Test (Experimental)</summary>
-        <div class="schema-test-container">
-          <form id="schema:nameSpecialValidationRules" data-form="schema--nameSpecialValidationRules">
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="name">name (name)</label>
-                <input name="name" required null/>
-              </div>
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="cellphone">cellphone (phone)</label>
-                <input name="cellphone" required null/>
-              </div>
-            
-              <div style="display: flex; flex-direction: column;">
-                <label for="email">email (email)</label>
-                <input name="email" required null/>
-              </div>
-            
-            <div style="display: flex; flex-direction: column;">
-              <label for="check-rule-mate-validators">VALIDATORS</label>
-              <select name="check-rule-mate-validators" required>
+
+        
+          <h3>Modifiers</h3>
+          
+            <div class="modifier">
+              <span class="tag modifier">confirm</span>
+              <p>Used to validate if email confirm fields are valid emails and matches with the primary email field.</p>
+
+              <div class="flow">
                 
-                    <option value=myValidator>myValidator</option>
-                  ,
-                    <option value=nameValidator>nameValidator</option>
-                  
-              </select>
-            </div>
-            <div style="display: flex; flex-direction: column;">
-              <label for="check-rule-mate-rules">RULES</label>
-              <select name="check-rule-mate-rules" required>
+                  <div class="flow-step">regex</div>
+                  <div class="flow-arrow">→</div>
                 
-                    <option value=myValidatorRules>myValidatorRules</option>
-                  ,
-                    <option value=nameSpecialValidationRules>nameSpecialValidationRules</option>
-                  
-              </select>
+                  <div class="flow-step">equals</div>
+                  <div class="flow-arrow">→</div>
+                
+                <div class="flow-step success">valid</div>
+              </div>
+
+              <h4>Error Codes</h4>
+              
+      <ul>
+        <li><a href="#error-email" class="tag error">regex</a> email.regex</li><li><a href="#error-email" class="tag error">equals</a> email.equals</li>
+      </ul>
+    
             </div>
-            <button type="submit">Validate Schema</button>
-          </form>
-          <div class="schema-test-result">
-            <span>Result:</span>
-            <textarea id="textarea-schema-nameSpecialValidationRules"></textarea>
-          </div>
+          
+        
+
+        <h3>Used by Schemas</h3>
+        <ul>
+          <li>contactUs → <strong>email</strong> (email)</li><li>contactUs → <strong>emailConfirm</strong> (email--confirm)</li><li>customerCreation → <strong>email</strong> (email)</li><li>myAccount → <strong>email</strong> (email)</li><li>myAccount → <strong>emailConfirm</strong> (email--confirm)</li><li>nameSpecialValidationRules → <strong>email</strong> (email)</li>
+        </ul>
+
+        
+          <h3>Notes</h3>
+          <div class="rule-notes">To use email confirm modifier use email--confirm</div>
+        
+      </section>
+      
+      <section id="rule-phone" class="card">
+        <h2>Rule: phone (myValidatorRules)</h2>
+        <p>Checks if phone number has a valid format.</p>
+
+        <h3>Validation Flow</h3>
+        <div class="flow">
+          
+            <div class="flow-step">regex</div>
+            <div class="flow-arrow">→</div>
+          
+          <div class="flow-step success">valid</div>
         </div>
-      </details>
-    
-    </section>
-  
-  
-    <section id="rule-name" class="card">
-      <h2>Rule: name (myValidatorRules)</h2>
-      <p>Used to validate names based if they have text or not.</p>
 
-      <h3>Validation Flow</h3>
-      <div class="flow">
+        <h3>Error Codes</h3>
         
-          <div class="flow-step">hasText</div>
-          <div class="flow-arrow">→</div>
-        
-        <div class="flow-step success">valid</div>
-      </div>
-
-      <h3>Error Codes</h3>
-      
-    <ul>
-      <li><a href="#error-common" class="tag error">hasText</a> common.hasText</li>
-    </ul>
-  
-
-      
-
-      <h3>Used by Schemas</h3>
       <ul>
-        <li>contactUs → <strong>name</strong> (name)</li><li>contactUs → <strong>lastName</strong> (name)</li><li>customerCreation → <strong>name</strong> (name)</li><li>customerCreation → <strong>lastName</strong> (name)</li><li>myAccount → <strong>name</strong> (name)</li><li>myAccount → <strong>lastName</strong> (name)</li><li>nameSpecialValidationRules → <strong>name</strong> (name)</li>
+        <li><a href="#error-phone" class="tag error">regex</a> phone.regex</li>
       </ul>
-
-      
-        <h3>Notes</h3>
-        <div class="rule-notes">You can add your special note here.</div>
-      
-    </section>
     
-    <section id="rule-hasText" class="card">
-      <h2>Rule: hasText (myValidatorRules)</h2>
-      <p>Used to validate if a text field is not blank.</p>
 
-      <h3>Validation Flow</h3>
-      <div class="flow">
         
-          <div class="flow-step">hasText</div>
-          <div class="flow-arrow">→</div>
+
+        <h3>Used by Schemas</h3>
+        <ul>
+          <li>contactUs → <strong>phone</strong> (phone)</li><li>customerCreation → <strong>phone</strong> (phone)</li><li>myAccount → <strong>phone</strong> (phone)</li><li>nameSpecialValidationRules → <strong>cellphone</strong> (phone)</li>
+        </ul>
+
         
-        <div class="flow-step success">valid</div>
-      </div>
-
-      <h3>Error Codes</h3>
+          <h3>Notes</h3>
+          <div class="rule-notes">Only works for Brazilian's phone numbers</div>
+        
+      </section>
       
-    <ul>
-      <li><a href="#error-common" class="tag error">hasText</a> common.hasText</li>
-    </ul>
-  
+      <section id="rule-date" class="card">
+        <h2>Rule: date (myValidatorRules)</h2>
+        <p>Used to validate a date format in date or string fields</p>
 
-      
+        <h3>Validation Flow</h3>
+        <div class="flow">
+          
+            <div class="flow-step">regex</div>
+            <div class="flow-arrow">→</div>
+          
+            <div class="flow-step">validDate</div>
+            <div class="flow-arrow">→</div>
+          
+          <div class="flow-step success">valid</div>
+        </div>
 
-      <h3>Used by Schemas</h3>
+        <h3>Error Codes</h3>
+        
       <ul>
-        <li>contactUs → <strong>subject</strong> (hasText)</li><li>contactUs → <strong>message</strong> (hasText)</li>
+        <li><a href="#error-common" class="tag error">regex</a> common.dateFormat</li><li><a href="#error-date" class="tag error">validDate</a> date.validDate</li>
       </ul>
-
-      
-    </section>
     
-    <section id="rule-email" class="card">
-      <h2>Rule: email (myValidatorRules)</h2>
-      <p>Used to validate email fields. Checking if hasText and if matches with a valid format for emails.</p>
 
-      <h3>Validation Flow</h3>
-      <div class="flow">
         
-          <div class="flow-step">regex</div>
-          <div class="flow-arrow">→</div>
-        
-        <div class="flow-step success">valid</div>
-      </div>
-
-      <h3>Error Codes</h3>
-      
-    <ul>
-      <li><a href="#error-email" class="tag error">regex</a> email.regex</li>
-    </ul>
-  
-
-      
-        <h3>Modifiers</h3>
-        
-          <div class="modifier">
-            <span class="tag modifier">confirm</span>
-            <p>Used to validate if email confirm fields are valid emails and matches with the primary email field.</p>
-
-            <div class="flow">
+          <h3>Modifiers</h3>
+          
+            <div class="modifier">
+              <span class="tag modifier">age</span>
               
-                <div class="flow-step">regex</div>
-                <div class="flow-arrow">→</div>
+
+              <div class="flow">
+                
+                  <div class="flow-step">regex</div>
+                  <div class="flow-arrow">→</div>
+                
+                  <div class="flow-step">validateAge</div>
+                  <div class="flow-arrow">→</div>
+                
+                <div class="flow-step success">valid</div>
+              </div>
+
+              <h4>Error Codes</h4>
               
-                <div class="flow-step">equals</div>
-                <div class="flow-arrow">→</div>
-              
-              <div class="flow-step success">valid</div>
+      <ul>
+        <li><a href="#error-common" class="tag error">regex</a> common.dateFormat</li><li><a href="#error-date" class="tag error">validateAge</a> date.validateAge</li>
+      </ul>
+    
             </div>
-
-            <h4>Error Codes</h4>
-            
-    <ul>
-      <li><a href="#error-email" class="tag error">regex</a> email.regex</li><li><a href="#error-email" class="tag error">equals</a> email.equals</li>
-    </ul>
-  
-          </div>
+          
         
-      
 
-      <h3>Used by Schemas</h3>
+        <h3>Used by Schemas</h3>
+        <ul>
+          <li>customerCreation → <strong>birthdate</strong> (date--age)</li><li>myAccount → <strong>birthdate</strong> (date--age)</li>
+        </ul>
+
+        
+          <h3>Notes</h3>
+          <div class="rule-notes">Can validate someone age based on birthdate through the date--age modifier</div>
+        
+      </section>
+      
+      <section id="rule-cpf" class="card">
+        <h2>Rule: cpf (myValidatorRules)</h2>
+        <p>Used to check if someone CPF is valid or not</p>
+
+        <h3>Validation Flow</h3>
+        <div class="flow">
+          
+            <div class="flow-step">cpf</div>
+            <div class="flow-arrow">→</div>
+          
+          <div class="flow-step success">valid</div>
+        </div>
+
+        <h3>Error Codes</h3>
+        
       <ul>
-        <li>contactUs → <strong>email</strong> (email)</li><li>contactUs → <strong>emailConfirm</strong> (email--confirm)</li><li>customerCreation → <strong>email</strong> (email)</li><li>myAccount → <strong>email</strong> (email)</li><li>myAccount → <strong>emailConfirm</strong> (email--confirm)</li><li>nameSpecialValidationRules → <strong>email</strong> (email)</li>
+        <li><a href="#error-cpf" class="tag error">cpf</a> cpf.cpf</li>
       </ul>
-
-      
-        <h3>Notes</h3>
-        <div class="rule-notes">To use email confirm modifier use email--confirm</div>
-      
-    </section>
     
-    <section id="rule-phone" class="card">
-      <h2>Rule: phone (myValidatorRules)</h2>
-      <p>Checks if phone number has a valid format.</p>
 
-      <h3>Validation Flow</h3>
-      <div class="flow">
         
-          <div class="flow-step">regex</div>
-          <div class="flow-arrow">→</div>
+
+        <h3>Used by Schemas</h3>
+        <ul>
+          <li>customerCreation → <strong>cpf</strong> (cpf)</li><li>myAccount → <strong>cpf</strong> (cpf)</li>
+        </ul>
+
         
-        <div class="flow-step success">valid</div>
-      </div>
-
-      <h3>Error Codes</h3>
+          <h3>Notes</h3>
+          <div class="rule-notes">CPF is a ID document which only works in Brazil</div>
+        
+      </section>
       
-    <ul>
-      <li><a href="#error-phone" class="tag error">regex</a> phone.regex</li>
-    </ul>
-  
+      <section id="rule-name" class="card">
+        <h2>Rule: name (nameSpecialValidationRules)</h2>
+        
 
-      
+        <h3>Validation Flow</h3>
+        <div class="flow">
+          
+            <div class="flow-step">nameSpecialValidation</div>
+            <div class="flow-arrow">→</div>
+          
+          <div class="flow-step success">valid</div>
+        </div>
 
-      <h3>Used by Schemas</h3>
+        <h3>Error Codes</h3>
+        
       <ul>
-        <li>contactUs → <strong>phone</strong> (phone)</li><li>customerCreation → <strong>phone</strong> (phone)</li><li>myAccount → <strong>phone</strong> (phone)</li><li>nameSpecialValidationRules → <strong>cellphone</strong> (phone)</li>
+        <li><a href="#error-name" class="tag error">nameSpecialValidation</a> name.nameSpecialValidation</li>
       </ul>
-
-      
-        <h3>Notes</h3>
-        <div class="rule-notes">Only works for Brazilian's phone numbers</div>
-      
-    </section>
     
-    <section id="rule-date" class="card">
-      <h2>Rule: date (myValidatorRules)</h2>
-      <p>Used to validate a date format in date or string fields</p>
 
-      <h3>Validation Flow</h3>
-      <div class="flow">
         
-          <div class="flow-step">regex</div>
-          <div class="flow-arrow">→</div>
+
+        <h3>Used by Schemas</h3>
+        <ul>
+          <li>contactUs → <strong>name</strong> (name)</li><li>contactUs → <strong>lastName</strong> (name)</li><li>customerCreation → <strong>name</strong> (name)</li><li>customerCreation → <strong>lastName</strong> (name)</li><li>myAccount → <strong>name</strong> (name)</li><li>myAccount → <strong>lastName</strong> (name)</li><li>nameSpecialValidationRules → <strong>name</strong> (name)</li>
+        </ul>
+
         
-          <div class="flow-step">validDate</div>
-          <div class="flow-arrow">→</div>
-        
-        <div class="flow-step success">valid</div>
-      </div>
-
-      <h3>Error Codes</h3>
+      </section>
       
-    <ul>
-      <li><a href="#error-common" class="tag error">regex</a> common.dateFormat</li><li><a href="#error-date" class="tag error">validDate</a> date.validDate</li>
-    </ul>
-  
-
-      
-        <h3>Modifiers</h3>
-        
-          <div class="modifier">
-            <span class="tag modifier">age</span>
-            
-
-            <div class="flow">
-              
-                <div class="flow-step">regex</div>
-                <div class="flow-arrow">→</div>
-              
-                <div class="flow-step">validateAge</div>
-                <div class="flow-arrow">→</div>
-              
-              <div class="flow-step success">valid</div>
-            </div>
-
-            <h4>Error Codes</h4>
-            
-    <ul>
-      <li><a href="#error-common" class="tag error">regex</a> common.dateFormat</li><li><a href="#error-date" class="tag error">validateAge</a> date.validateAge</li>
-    </ul>
-  
-          </div>
-        
-      
-
-      <h3>Used by Schemas</h3>
-      <ul>
-        <li>customerCreation → <strong>birthdate</strong> (date--age)</li><li>myAccount → <strong>birthdate</strong> (date--age)</li>
-      </ul>
-
-      
-        <h3>Notes</h3>
-        <div class="rule-notes">Can validate someone age based on birthdate through the date--age modifier</div>
-      
-    </section>
     
-    <section id="rule-cpf" class="card">
-      <h2>Rule: cpf (myValidatorRules)</h2>
-      <p>Used to check if someone CPF is valid or not</p>
-
-      <h3>Validation Flow</h3>
-      <div class="flow">
+      <section id="error-common" class="card">
+        <h2>Error: common (myValidatorRules)</h2>
+        <ul>
         
-          <div class="flow-step">cpf</div>
-          <div class="flow-arrow">→</div>
+          <li><span class="tag error">hasText</span> Please, fill the field </li>
         
-        <div class="flow-step success">valid</div>
-      </div>
+          <li><span class="tag error">dateFormat</span> Please, fill the field with a valid date </li>
+        
+        </ul>
 
-      <h3>Error Codes</h3>
-      
-    <ul>
-      <li><a href="#error-cpf" class="tag error">cpf</a> cpf.cpf</li>
-    </ul>
-  
-
-      
-
-      <h3>Used by Schemas</h3>
-      <ul>
-        <li>customerCreation → <strong>cpf</strong> (cpf)</li><li>myAccount → <strong>cpf</strong> (cpf)</li>
-      </ul>
-
-      
-        <h3>Notes</h3>
-        <div class="rule-notes">CPF is a ID document which only works in Brazil</div>
-      
-    </section>
+        <h3>Used by Rules</h3>
+        <ul>
+          
+            <li>myValidatorRules → <strong>name</strong> (common.hasText)</li><li>myValidatorRules → <strong>hasText</strong> (common.hasText)</li>
+          
+            <li>myValidatorRules → <strong>date</strong> (common.dateFormat)</li><li>myValidatorRules → <strong>date</strong> (common.dateFormat)</li>
+          
+        </ul>
+      </section>
     
-    <section id="rule-name" class="card">
-      <h2>Rule: name (nameSpecialValidationRules)</h2>
-      
-
-      <h3>Validation Flow</h3>
-      <div class="flow">
+      <section id="error-email" class="card">
+        <h2>Error: email (myValidatorRules)</h2>
+        <ul>
         
-          <div class="flow-step">nameSpecialValidation</div>
-          <div class="flow-arrow">→</div>
+          <li><span class="tag error">regex</span> Please, fill the field with a valid e-mail </li>
         
-        <div class="flow-step success">valid</div>
-      </div>
+          <li><span class="tag error">equals</span> The email and email confirm are not equals </li>
+        
+        </ul>
 
-      <h3>Error Codes</h3>
-      
-    <ul>
-      <li><a href="#error-name" class="tag error">nameSpecialValidation</a> name.nameSpecialValidation</li>
-    </ul>
-  
-
-      
-
-      <h3>Used by Schemas</h3>
-      <ul>
-        <li>contactUs → <strong>name</strong> (name)</li><li>contactUs → <strong>lastName</strong> (name)</li><li>customerCreation → <strong>name</strong> (name)</li><li>customerCreation → <strong>lastName</strong> (name)</li><li>myAccount → <strong>name</strong> (name)</li><li>myAccount → <strong>lastName</strong> (name)</li><li>nameSpecialValidationRules → <strong>name</strong> (name)</li>
-      </ul>
-
-      
-    </section>
+        <h3>Used by Rules</h3>
+        <ul>
+          
+            <li>myValidatorRules → <strong>email</strong> (email.regex)</li><li>myValidatorRules → <strong>email</strong> (email.regex)</li>
+          
+            <li>myValidatorRules → <strong>email</strong> (email.equals)</li>
+          
+        </ul>
+      </section>
     
+      <section id="error-phone" class="card">
+        <h2>Error: phone (myValidatorRules)</h2>
+        <ul>
+        
+          <li><span class="tag error">regex</span> Please, fill the field with a valid phone </li>
+        
+        </ul>
+
+        <h3>Used by Rules</h3>
+        <ul>
+          
+            <li>myValidatorRules → <strong>phone</strong> (phone.regex)</li>
+          
+        </ul>
+      </section>
+    
+      <section id="error-date" class="card">
+        <h2>Error: date (myValidatorRules)</h2>
+        <ul>
+        
+          <li><span class="tag error">validDate</span> Please, fill the field with a existent date </li>
+        
+          <li><span class="tag error">validateAge</span> Invalid age, under 18 </li>
+        
+        </ul>
+
+        <h3>Used by Rules</h3>
+        <ul>
+          
+            <li>myValidatorRules → <strong>date</strong> (date.validDate)</li>
+          
+            <li>myValidatorRules → <strong>date</strong> (date.validateAge)</li>
+          
+        </ul>
+      </section>
+    
+      <section id="error-cpf" class="card">
+        <h2>Error: cpf (myValidatorRules)</h2>
+        <ul>
+        
+          <li><span class="tag error">cpf</span> Plase, fill the field with a valid CPF </li>
+        
+        </ul>
+
+        <h3>Used by Rules</h3>
+        <ul>
+          
+            <li>myValidatorRules → <strong>cpf</strong> (cpf.cpf)</li>
+          
+        </ul>
+      </section>
+    
+      <section id="error-name" class="card">
+        <h2>Error: name (myValidatorRules)</h2>
+        <ul>
+        
+          <li><span class="tag error">nameSpecialValidation</span> Please, fill the field following fields: name, email and cellphone </li>
+        
+        </ul>
+
+        <h3>Used by Rules</h3>
+        <ul>
+          
+            <li>nameSpecialValidationRules → <strong>name</strong> (name.nameSpecialValidation)</li>
+          
+        </ul>
+      </section>
+    
+  </main>
+
+  <script>
   
-    <section id="error-common" class="card">
-      <h2>Error: common (myValidatorRules)</h2>
-      <ul>
-      
-        <li><span class="tag error">hasText</span> Please, fill the field </li>
-      
-        <li><span class="tag error">dateFormat</span> Please, fill the field with a valid date </li>
-      
-      </ul>
-
-      <h3>Used by Rules</h3>
-      <ul>
-        
-          <li>myValidatorRules → <strong>name</strong> (common.hasText)</li><li>myValidatorRules → <strong>hasText</strong> (common.hasText)</li>
-        
-          <li>myValidatorRules → <strong>date</strong> (common.dateFormat)</li><li>myValidatorRules → <strong>date</strong> (common.dateFormat)</li>
-        
-      </ul>
-    </section>
-  
-    <section id="error-email" class="card">
-      <h2>Error: email (myValidatorRules)</h2>
-      <ul>
-      
-        <li><span class="tag error">regex</span> Please, fill the field with a valid e-mail </li>
-      
-        <li><span class="tag error">equals</span> The email and email confirm are not equals </li>
-      
-      </ul>
-
-      <h3>Used by Rules</h3>
-      <ul>
-        
-          <li>myValidatorRules → <strong>email</strong> (email.regex)</li><li>myValidatorRules → <strong>email</strong> (email.regex)</li>
-        
-          <li>myValidatorRules → <strong>email</strong> (email.equals)</li>
-        
-      </ul>
-    </section>
-  
-    <section id="error-phone" class="card">
-      <h2>Error: phone (myValidatorRules)</h2>
-      <ul>
-      
-        <li><span class="tag error">regex</span> Please, fill the field with a valid phone </li>
-      
-      </ul>
-
-      <h3>Used by Rules</h3>
-      <ul>
-        
-          <li>myValidatorRules → <strong>phone</strong> (phone.regex)</li>
-        
-      </ul>
-    </section>
-  
-    <section id="error-date" class="card">
-      <h2>Error: date (myValidatorRules)</h2>
-      <ul>
-      
-        <li><span class="tag error">validDate</span> Please, fill the field with a existent date </li>
-      
-        <li><span class="tag error">validateAge</span> Invalid age, under 18 </li>
-      
-      </ul>
-
-      <h3>Used by Rules</h3>
-      <ul>
-        
-          <li>myValidatorRules → <strong>date</strong> (date.validDate)</li>
-        
-          <li>myValidatorRules → <strong>date</strong> (date.validateAge)</li>
-        
-      </ul>
-    </section>
-  
-    <section id="error-cpf" class="card">
-      <h2>Error: cpf (myValidatorRules)</h2>
-      <ul>
-      
-        <li><span class="tag error">cpf</span> Plase, fill the field with a valid CPF </li>
-      
-      </ul>
-
-      <h3>Used by Rules</h3>
-      <ul>
-        
-          <li>myValidatorRules → <strong>cpf</strong> (cpf.cpf)</li>
-        
-      </ul>
-    </section>
-  
-    <section id="error-name" class="card">
-      <h2>Error: name (myValidatorRules)</h2>
-      <ul>
-      
-        <li><span class="tag error">nameSpecialValidation</span> Please, fill the field following fields: name, email and cellphone </li>
-      
-      </ul>
-
-      <h3>Used by Rules</h3>
-      <ul>
-        
-          <li>nameSpecialValidationRules → <strong>name</strong> (name.nameSpecialValidation)</li>
-        
-      </ul>
-    </section>
-  
-</main>
-
-<script>
-
-  const search = document.getElementById("search");
-  search.addEventListener("input", e => {
-    const value = e.target.value.toLowerCase();
-    document.querySelectorAll("section.card").forEach(card => {
-      card.style.display = card.innerText.toLowerCase().includes(value)
-        ? ""
-        : "none";
-    });
-  });
-
-  
-    setTimeout(() => {
-      const rulesFiles = [{"name":"myValidatorRules","content":{"name":{"validate":["hasText"],"error":{"hasText":"common.hasText"},"docs":{"description":"Used to validate names based if they have text or not.","notes":"You can add your special note here."}},"hasText":{"validate":["hasText"],"error":{"hasText":"common.hasText"},"docs":{"description":"Used to validate if a text field is not blank."}},"email":{"regex":"/^[a-z0-9.]+@[a-z0-9]+\\.[a-z]+(\\.[a-z]+)?$/i","validate":["regex"],"error":{"regex":"email.regex"},"modifier":{"confirm":{"validate":["regex","equals"],"params":{"equals":["$email"]},"error":{"regex":"email.regex","equals":"email.equals"},"docs":{"description":"Used to validate if email confirm fields are valid emails and matches with the primary email field."}}},"docs":{"description":"Used to validate email fields. Checking if hasText and if matches with a valid format for emails.","notes":"To use email confirm modifier use email--confirm"}},"phone":{"regex":"/^[0-9]{4}-[0-9]?[0-9]{4}$/","validate":["regex"],"error":{"regex":"phone.regex"},"docs":{"description":"Checks if phone number has a valid format.","notes":"Only works for Brazilian's phone numbers"}},"date":{"regex":"/^\\d{4}[/\\-](0?[1-9]|1[012])[/\\-](0?[1-9]|[12][0-9]|3[01])$/","validate":["regex","validDate"],"error":{"regex":"common.dateFormat","validDate":"date.validDate"},"modifier":{"age":{"validate":["regex","validateAge"],"params":{"validateAge":[18,130]},"error":{"regex":"common.dateFormat","validateAge":"date.validateAge"}}},"docs":{"description":"Used to validate a date format in date or string fields","notes":"Can validate someone age based on birthdate through the date--age modifier"}},"cpf":{"validate":["cpf"],"error":{"cpf":"cpf.cpf"},"docs":{"description":"Used to check if someone CPF is valid or not","notes":"CPF is a ID document which only works in Brazil"}}}},{"name":"nameSpecialValidationRules","content":{"name":{"validate":["nameSpecialValidation"],"params":{"nameSpecialValidation":["$email","$cellphone"]},"error":{"nameSpecialValidation":"name.nameSpecialValidation"}}}}]
-      const schemasFiles = [{"name":"contactUs","content":{"name":{"rule":"name","required":true},"lastName":{"rule":"name","required":true},"email":{"rule":"email","required":true,"cache":false,"attributesHTML":{"type":"email"}},"emailConfirm":{"rule":"email--confirm","required":true,"cache":false,"attributesHTML":{"type":"email"}},"phone":{"rule":"phone","required":false,"attributesHTML":{"type":"tel"}},"subject":{"rule":"hasText","required":true},"message":{"rule":"hasText","required":true}}},{"name":"customerCreation","content":{"name":{"rule":"name","required":true},"lastName":{"rule":"name","required":false},"birthdate":{"rule":"date--age","required":true},"cpf":{"rule":"cpf","required":true},"email":{"rule":"email","required":true},"phone":{"rule":"phone","required":true}}},{"name":"myAccount","content":{"name":{"rule":"name","required":true},"lastName":{"rule":"name","required":false},"birthdate":{"rule":"date--age","required":true},"cpf":{"rule":"cpf","required":true},"email":{"rule":"email","required":true},"emailConfirm":{"rule":"email--confirm","required":true},"phone":{"rule":"phone","required":true}}},{"name":"nameSpecialValidationRules","content":{"name":{"rule":"name","required":true},"cellphone":{"rule":"phone","required":true},"email":{"rule":"email","required":true}}}]
-
-      const formElements = document.querySelectorAll('form[data-form]');
-      formElements.forEach((formElement) => {
-        formElement.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const inputElements = formElement.querySelectorAll('input, select');
-          const formName = formElement.dataset.form.split('--')[1];
-          const formData = {};
-          inputElements.forEach((inputElement) => {
-            formData[inputElement.name] = inputElement.value;
-          })
-
-          const validatorHelper = window.validatorHelpers[formData["check-rule-mate-validators"]][formData["check-rule-mate-validators"]];
-
-          const rules = rulesFiles.filter((rulesFile) => rulesFile.name === formData["check-rule-mate-rules"])[0].content;
-          const schema = schemasFiles.filter((schemaFile) => schemaFile.name === formName)[0].content;
-
-          const validator = createValidator(formData, {validationHelpers: validatorHelper, rules: rules, schema: schema, options: { propertiesMustMatch: false, abortEarly: false, cache: true}});
-          const result = await validator.validate();
-          console.log(formName, result);
-
-          const textAreaElement = document.querySelector('#textarea-schema-'+formName);
-          textAreaElement.value = JSON.stringify(result);
-        });
+    const search = document.getElementById("search");
+    search.addEventListener("input", e => {
+      const value = e.target.value.toLowerCase();
+      document.querySelectorAll("section.card").forEach(card => {
+        card.style.display = card.innerText.toLowerCase().includes(value)
+          ? ""
+          : "none";
       });
-    }, 1000);
-  
-  
-</script>
+    });
 
-</body>
-</html>
+    
+      setTimeout(() => {
+        const rulesFiles = [{"name":"myValidatorRules","content":{"name":{"validate":["hasText"],"error":{"hasText":"common.hasText"},"docs":{"description":"Used to validate names based if they have text or not.","notes":"You can add your special note here."}},"hasText":{"validate":["hasText"],"error":{"hasText":"common.hasText"},"docs":{"description":"Used to validate if a text field is not blank."}},"email":{"regex":"/^[a-z0-9.]+@[a-z0-9]+\\.[a-z]+(\\.[a-z]+)?$/i","validate":["regex"],"error":{"regex":"email.regex"},"modifier":{"confirm":{"validate":["regex","equals"],"params":{"equals":["$email"]},"error":{"regex":"email.regex","equals":"email.equals"},"docs":{"description":"Used to validate if email confirm fields are valid emails and matches with the primary email field."}}},"docs":{"description":"Used to validate email fields. Checking if hasText and if matches with a valid format for emails.","notes":"To use email confirm modifier use email--confirm"}},"phone":{"regex":"/^[0-9]{4}-[0-9]?[0-9]{4}$/","validate":["regex"],"error":{"regex":"phone.regex"},"docs":{"description":"Checks if phone number has a valid format.","notes":"Only works for Brazilian's phone numbers"}},"date":{"regex":"/^\\d{4}[/\\-](0?[1-9]|1[012])[/\\-](0?[1-9]|[12][0-9]|3[01])$/","validate":["regex","validDate"],"error":{"regex":"common.dateFormat","validDate":"date.validDate"},"modifier":{"age":{"validate":["regex","validateAge"],"params":{"validateAge":[18,130]},"error":{"regex":"common.dateFormat","validateAge":"date.validateAge"}}},"docs":{"description":"Used to validate a date format in date or string fields","notes":"Can validate someone age based on birthdate through the date--age modifier"}},"cpf":{"validate":["cpf"],"error":{"cpf":"cpf.cpf"},"docs":{"description":"Used to check if someone CPF is valid or not","notes":"CPF is a ID document which only works in Brazil"}}}},{"name":"nameSpecialValidationRules","content":{"name":{"validate":["nameSpecialValidation"],"params":{"nameSpecialValidation":["$email","$cellphone"]},"error":{"nameSpecialValidation":"name.nameSpecialValidation"}}}}]
+        const schemasFiles = [{"name":"contactUs","content":{"name":{"rule":"name","required":true},"lastName":{"rule":"name","required":true},"email":{"rule":"email","required":true,"cache":false,"attributesHTML":{"type":"email"}},"emailConfirm":{"rule":"email--confirm","required":true,"cache":false,"attributesHTML":{"type":"email"}},"phone":{"rule":"phone","required":false,"attributesHTML":{"type":"tel"}},"subject":{"rule":"hasText","required":true},"message":{"rule":"hasText","required":true}}},{"name":"customerCreation","content":{"name":{"rule":"name","required":true},"lastName":{"rule":"name","required":false},"birthdate":{"rule":"date--age","required":true},"cpf":{"rule":"cpf","required":true},"email":{"rule":"email","required":true},"phone":{"rule":"phone","required":true}}},{"name":"myAccount","content":{"name":{"rule":"name","required":true},"lastName":{"rule":"name","required":false},"birthdate":{"rule":"date--age","required":true},"cpf":{"rule":"cpf","required":true},"email":{"rule":"email","required":true},"emailConfirm":{"rule":"email--confirm","required":true},"phone":{"rule":"phone","required":true}}},{"name":"nameSpecialValidationRules","content":{"name":{"rule":"name","required":true},"cellphone":{"rule":"phone","required":true},"email":{"rule":"email","required":true}}}]
+
+        const formElements = document.querySelectorAll('form[data-form]');
+        formElements.forEach((formElement) => {
+          formElement.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const inputElements = formElement.querySelectorAll('input, select');
+            const formName = formElement.dataset.form.split('--')[1];
+            const formData = {};
+            inputElements.forEach((inputElement) => {
+              formData[inputElement.name] = inputElement.value;
+            })
+
+            const validatorHelper = window.validatorHelpers[formData["check-rule-mate-validators"]][formData["check-rule-mate-validators"]];
+
+            const rules = rulesFiles.filter((rulesFile) => rulesFile.name === formData["check-rule-mate-rules"])[0].content;
+            const schema = schemasFiles.filter((schemaFile) => schemaFile.name === formName)[0].content;
+
+            const validator = createValidator(formData, {validationHelpers: validatorHelper, rules: rules, schema: schema, options: { propertiesMustMatch: false, abortEarly: false, cache: true}});
+            const result = await validator.validate();
+            console.log(formName, result);
+
+            const textAreaElement = document.querySelector('#textarea-schema-'+formName);
+            textAreaElement.value = JSON.stringify(result);
+          });
+        });
+      }, 1000);
+    
+    
+  </script>
+
+  </body>
+  </html>
+  
