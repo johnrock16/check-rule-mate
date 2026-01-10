@@ -1,23 +1,77 @@
 /**
- * check-rule-mate — Auto Documentation Generator
+ * check-rule-mate — Auto Documentation Generator With Playground
  */
 
 const fs = require('fs');
 const path = require('path');
 const process = require('process');
 const { parseArgs } = require('../utils/args.js');
+let esbuild;
 
-const generateDocs = function ({ rulesArg, schemasArg, errorsArg, outArg }) {
-  console.log(rulesArg)
+try {
+  esbuild = require('esbuild');
+} catch {
+  console.warn(
+    '[check-rule-mate] esbuild not found. ' +
+    'Install it to enable playground generation.'
+  );
+  process.exit(1);
+}
+
+const generateDocs = function ({ rulesArg, schemasArg, errorsArg, optionsArg, outArg, commandArg }) {
   const RULES_DIR = rulesArg;
   const SCHEMAS_DIR = schemasArg;
   const ERRORS_DIR = errorsArg;
+  const OPTIONS_DIR = optionsArg;
   const OUTPUT = outArg || "check-rule-mate-docs.html";
+  const OUTPUT_DIR = path.dirname(OUTPUT);
+  const isPlayground = commandArg === 'docs:playground';
+
+  const OPTIONS = OPTIONS_DIR ? JSON.parse(fs.readFileSync(OPTIONS_DIR, "utf-8")) : null;
+
+  if (isPlayground && OPTIONS) {
+    let entryPointFile = Object.keys(OPTIONS.validators).map((key) => `var ${key} = require('${OPTIONS.validators[key]}')`).join('\n');
+    entryPointFile += `\n window.validatorHelpers = {${Object.keys(OPTIONS.validators).map((key) => `${key}: ${key}`)}}`
+
+    fs.writeFileSync(`./check-rule-mate.validators.docs.js`, entryPointFile);
+
+    esbuild.build({
+      entryPoints: ['./node_modules/check-rule-mate/src/main.js'],
+      bundle: true,
+      outfile: `${OUTPUT_DIR}/check-rule-mate.js`,
+      platform: 'browser',
+      target: 'node16',
+      format: 'iife',
+      minify: false
+    }).then(() => {
+        console.log('Build completed successfully: check-rule-mate.js');
+
+        const checkRuleMateFIle = fs.readFileSync(`${OUTPUT_DIR}/check-rule-mate.js`, 'utf-8');
+        const lines = checkRuleMateFIle.split('\n')
+        lines.shift();
+        lines.splice(lines.length - 2, 1)
+        fs.writeFileSync(`${OUTPUT_DIR}/check-rule-mate.js`, lines.join('\n'))
+    }).catch(() => process.exit(1));
+
+    esbuild.build({
+      entryPoints: [`./check-rule-mate.validators.docs.js`],
+      bundle: true,
+      outfile: `${OUTPUT_DIR}/index.js`,
+      platform: 'browser',
+      target: 'node16',
+      format: 'iife',
+      minify: false
+    }).then(() => {
+        console.log('Build completed successfully: index.js');
+        fs.rmSync('./check-rule-mate.validators.docs.js')
+    }).catch(() => process.exit(1));
+  }
+
 
   if (!RULES_DIR || !SCHEMAS_DIR) {
     console.error(`
   Usage:
-  npx check-rule-mate docs --rules ./rules --schemas ./schemas --errors ./errors --out docs.html
+  npx check-rule-mate docs:playground --rules ./rules --schemas ./schemas --errors ./errors --out docs.html
   `);
     process.exit(1);
   }
@@ -99,6 +153,10 @@ const generateDocs = function ({ rulesArg, schemasArg, errorsArg, outArg }) {
   <style>
   ${generateCSS()}
   </style>
+  ${isPlayground && OPTIONS ? `
+    <script src="./check-rule-mate.js" defer></script>
+    <script src="./index.js" defer></script>`
+  : ''}
   </head>
   <body>
 
@@ -181,7 +239,51 @@ const generateDocs = function ({ rulesArg, schemasArg, errorsArg, outArg }) {
           `).join("")}
         </tbody>
       </table>
-    </section>
+      ${isPlayground && OPTIONS ? `
+        <details class="schema-test">
+          <summary>Schema Test (Experimental)</summary>
+          <div class="schema-test-container">
+            <form id="schema:${schema.name}" data-form="schema--${schema.name}">
+              ${Object.entries(schema.content).map(([field, cfg]) => {
+                const attributesHTML = cfg.attributesHTML ? Object.keys(cfg.attributesHTML).map((key) => `${key}="${cfg?.attributesHTML[key]}"`).join(' ') : null
+                return `
+                <div style="display: flex; flex-direction: column;">
+                  <label for="${field}">${field} (${cfg.rule})</label>
+                  <input name="${field}" ${cfg.required ? 'required': ''} ${attributesHTML}/>
+                </div>
+              `}).join("")}
+              <div style="display: flex; flex-direction: column;">
+                <label for="check-rule-mate-validators">VALIDATORS</label>
+                <select name="check-rule-mate-validators" required>
+                  ${
+                    OPTIONS?.validators ? Object.keys(OPTIONS.validators).map((key) => `
+                      <option value=${key}>${key}</option>
+                    `)
+                    : ''
+                  }
+                </select>
+              </div>
+              <div style="display: flex; flex-direction: column;">
+                <label for="check-rule-mate-rules">RULES</label>
+                <select name="check-rule-mate-rules" required>
+                  ${
+                    rulesFiles ? rulesFiles.map((rulesFile) => `
+                      <option value=${rulesFile.name}>${rulesFile.name}</option>
+                    `)
+                    : ''
+                  }
+                </select>
+              </div>
+              <button type="submit">Validate Schema</button>
+            </form>
+            <div class="schema-test-result">
+              <span>Result:</span>
+              <textarea id="textarea-schema-${schema.name}" readonly></textarea>
+            </div>
+          </div>
+        </details>
+      ` : ''}
+      </section>
     `).join("");
   }
 
@@ -402,6 +504,75 @@ const generateDocs = function ({ rulesArg, schemasArg, errorsArg, outArg }) {
     .text-center {
       text-align: center;
     }
+
+    .schema-test {
+      margin-top: 32px;
+    }
+
+    .schema-test-container {
+      display: flex;
+      width: 100%;
+      margin: 32px 0 24px 0;
+      gap: 40px;
+    }
+
+    .schema-test-container > * {
+      width: 100%;
+    }
+
+    .schema-test-result span {
+      display: block;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .schema-test-result textarea {
+      width: 100%;
+      height: 80%;
+      color: #f4f4f4;
+      background-color: #111111;
+      border: none;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    form button[type="submit"] {
+      width: 100%;
+      padding: 16px 24px;
+      min-width: 120px;
+      min-height: 48px;
+      margin-top: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #444444;
+      background-color: #eede91;
+    }
+
+    label {
+      margin-bottom: 4px;
+      font-size: 16px;
+      color: #e5e7eb;
+    }
+
+    .schema-test input,
+    .schema-test select {
+      min-height: 28px;
+      padding: 4px 8px 4px 8px;
+      margin-bottom: 16px;
+      font-size: 16px;
+      color: #e5e7eb;
+      background-color: transparent;
+      border: none;
+      border-bottom: 1px solid white;
+    }
+
+    .schema-test select option {
+      background-color: #020617;
+      color: #e5e7eb;
+    }
     `;
   }
 
@@ -419,17 +590,52 @@ const generateDocs = function ({ rulesArg, schemasArg, errorsArg, outArg }) {
           : "none";
       });
     });
+
+    ${isPlayground && OPTIONS ? `
+      setTimeout(() => {
+        const rulesFiles = ${JSON.stringify(rulesFiles)}
+        const schemasFiles = ${JSON.stringify(schemasFiles)}
+
+        const formElements = document.querySelectorAll('form[data-form]');
+        formElements.forEach((formElement) => {
+          formElement.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const inputElements = formElement.querySelectorAll('input, select');
+            const formName = formElement.dataset.form.split('--')[1];
+            const formData = {};
+            inputElements.forEach((inputElement) => {
+              formData[inputElement.name] = inputElement.value;
+            })
+
+            const validatorHelper = window.validatorHelpers[formData["check-rule-mate-validators"]][formData["check-rule-mate-validators"]];
+
+            const rules = rulesFiles.filter((rulesFile) => rulesFile.name === formData["check-rule-mate-rules"])[0].content;
+            const schema = schemasFiles.filter((schemaFile) => schemaFile.name === formName)[0].content;
+
+            const validator = createValidator(formData, {validationHelpers: validatorHelper, rules: rules, schema: schema, options: { propertiesMustMatch: false, abortEarly: false, cache: true}});
+            const result = await validator.validate();
+            console.log(formName, result);
+
+            const textAreaElement = document.querySelector('#textarea-schema-'+formName);
+            textAreaElement.value = JSON.stringify(result);
+          });
+        });
+      }, 1000);
+    `: ''}
     `;
   }
 }
 
 module.exports = function docs(argv) {
   const args = parseArgs(argv);
+  console.log(args)
 
   return generateDocs({
     rulesArg: args.rules,
     schemasArg: args.schemas,
     errorsArg: args.errors,
-    outArg: args.out
+    optionsArg: args.options,
+    outArg: args.out,
+    commandArg: args.command
   });
 }

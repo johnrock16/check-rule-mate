@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
-const docs = require('./commands/generate-docs');
-const docsPlayground = require('./commands/generate-docs-playground-experimental');
-const verify = require('./commands/verify-templates');
+const docs = require('./commands/docs');
+const verify = require('./commands/verify');
 
 run(process.argv.slice(2));
 
@@ -15,7 +14,7 @@ function run(args) {
       return docs(rest);
 
     case 'docs:playground':
-      return docsPlayground(rest);
+      return docs([...rest, '--command', command]);
 
     case 'verify':
       return verify(rest);
