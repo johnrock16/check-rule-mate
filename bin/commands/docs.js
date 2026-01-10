@@ -628,7 +628,6 @@ const generateDocs = function ({ rulesArg, schemasArg, errorsArg, optionsArg, ou
 
 module.exports = function docs(argv) {
   const args = parseArgs(argv);
-  console.log(args)
 
   return generateDocs({
     rulesArg: args.rules,
