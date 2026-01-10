@@ -82,6 +82,7 @@ This separation makes the system flexible, scalable, and easy to maintain.
     - [Express](#express)
     - [Frontend](#frontend)
 - [When NOT to use check-rule-mate](#When-NOT-to-use-check-rule-mate)
+- [Full Documentation (in progress)](#full-documentation-in-progress)
 - [License](#License);
 
 ## Getting Started
@@ -633,6 +634,9 @@ Here you can found the DEMO page and it's a type of "playground" to test how RUL
 - Simple one-off forms
 - Basic required-only validation
 - When schema-based validation is enough
+
+## Full Documentation (in progress)
+The full documentation is available in the GitHub Repository in: [check-rule-mate documentation](johnrock16/check-rule-mate/tree/main/docs)
 
 ## License
 - ISC
