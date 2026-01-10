@@ -4,6 +4,7 @@ dist/main.js
 index.html
 jest.config.js
 build.js
+build-cli.js
 *.md
 *.git/
 .github/
@@ -11,3 +12,4 @@ build.js
 node_modules/
 .gitignore
 package-lock.json
+docs/
